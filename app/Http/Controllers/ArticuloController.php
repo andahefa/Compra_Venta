@@ -103,19 +103,23 @@ class ArticuloController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit(Request $request)
+    {       
 
-           $articulo = Articulo::find($id);
-            $articulo->name = Input::get('name');
-            $articulo->email = Input::get('email');
-            $articulo->nerd_level = Input::get('nerd_level');
+        /*Validaciones de los campos*/
+        $this->validate($request, [
+        'marca' => 'required',
+        ]);
+
+            $articulo = Articulo::find($request->id);
+            $articulo->marca = $request->marca;
+            $articulo->referencia = $request->referencia;
+            
             $articulo->save();
 
             // redirect
-            Session::flash('message', 'Successfully updated nerd!');
-            return Redirect::to('/index');
+            //Session::flash('message', 'Successfully updated nerd!');
+            return 1;
 
     }
 
@@ -126,7 +130,7 @@ class ArticuloController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         //
     }

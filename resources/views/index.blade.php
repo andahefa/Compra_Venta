@@ -261,11 +261,22 @@
                               <input type="text" class="form-control input-sm" name="referencia" id="referencia">
                               <label>Descripción</label>
                               <textarea rows="3" class="form-control input-sm" name="descripcion" id="descripcion"></textarea>
+
+                                  @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                             @endforeach
+                                        </ul>
+                                    </div><br />
+                                 @endif
                             </div>
+                             
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <input type="button" class="btn btn-success" data-dismiss="modal" onclick="editarArticulo()">Guardar</input>
+                          <input type="button" class="btn btn-success" data-dismiss="modal" value="Guardar" onclick="editarArticulo()"></input>
                         </div>
                       </div>
                       
@@ -311,8 +322,58 @@
 
         }
 
-        function editarArticulo(){}
-        
+        function editarArticulo(){
+
+            var id = $('#id').val();
+            var categoria = $('#categoria').val();
+            var estado = $('#estado').val();
+            var marca = $('#marca').val();
+            var referencia = $('#referencia').val();
+            var descripcion = $('#descripcion').val();
+
+                $.ajax({
+                    type:'post',
+                    url:"articulo/actualizar",
+                    data:{
+                        '_token': '{{csrf_token()}}',
+                        'id': id,
+                        'categoria':categoria,
+                        'estado':estado,
+                        'marca':marca,
+                        'referencia':referencia,
+                        'descripcion':descripcion
+                    },
+                    success: function(result){
+
+                        alert('actualizado con exito');
+                        location.reload();
+                    },
+                     error: function(data){
+
+
+                            if((data.responseText)){
+
+                                var errors = $.parseJSON(data.responseText);
+                                //alert(errors.marca);
+                                setTimeout(function () {
+                                    $('#modalEditarArticulo').modal('show');
+                                    if(errors.marca){
+                                         //$('#modalEditarArticulo').find('.modal-body').append(errors.marca);
+                                         var newTr = "<div class='alert alert-danger'><strong>Warning! </strong>"+errors.marca+"</div>";
+                                         $('#marca').after(newTr);
+                                    }else{
+                                        $('#modalEditarArticulo').find('.modal-body').append("sssssssssss");
+                                    }
+                        }, 500);
+                            }
+                            
+
+                    }   
+
+                });
+
+               
+        }
 
         </script>
 
