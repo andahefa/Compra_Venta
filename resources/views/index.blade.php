@@ -20,7 +20,14 @@
         
         <!-- CSS INCLUDE -->        
         <link rel="stylesheet" type="text/css" id="theme" href="css/theme-default.css"/>
-        <!-- EOF CSS INCLUDE -->                                    
+        <!-- EOF CSS INCLUDE --> 
+
+        <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+          <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>                                   
     </head>
     <body>
         <!-- START PAGE CONTAINER -->
@@ -206,7 +213,8 @@
 
                 <div class="container">
                 <h2><center><b>Inventario de Articulos</b></center></h2>
-                <a href="articulo/create"><button id="nuevoArticulo" class="btn btn-info"><span class="glyphicon glyphicon-plus-sign"> Nuevo Articulo</span></button></a>
+                <a href="articulo/create"><button id="nuevoArticulo" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"> Nuevo Articulo</span></button></a>
+                 <a href="articulo/create"><button id="nuevoArticulo" class="btn btn-primary">Nuevo Articulo</button></a>
                 <div>
                   <table id="articulos" class="table table-condensed table-bordered">
                     <thead>
@@ -424,11 +432,11 @@
         <!-- END PRELOADS -->                  
         
     <!-- START SCRIPTS -->
-        <!-- START PLUGINS -->
+        <!-- START PLUGINS 
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
-        <!-- END PLUGINS -->
+         END PLUGINS -->
 
         <!-- START THIS PAGE PLUGINS-->        
         <script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>        
