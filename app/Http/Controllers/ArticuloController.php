@@ -108,13 +108,20 @@ class ArticuloController extends Controller
 
         /*Validaciones de los campos*/
         $this->validate($request, [
+        'categoria' => 'required',
+        'estado' => 'required',
         'marca' => 'required',
+        'referencia' => 'required',
+        'descripcion' => 'required'
         ]);
 
             $articulo = Articulo::find($request->id);
+            $articulo->id_categoria = $request->categoria;
+            $articulo->id_estado_articulo = $request->estado;
             $articulo->marca = $request->marca;
             $articulo->referencia = $request->referencia;
-            
+            $articulo->descripcion = $request->descripcion;
+
             $articulo->save();
 
             // redirect

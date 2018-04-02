@@ -14,6 +14,7 @@
 
 //Route::controller('producto','ProductoController');
 Route::get('/index','ArticuloController@index');
+Route::get('/categorias','ArticuloController@index');
 Route::get('articulo/create','ArticuloController@create');
 Route::post('articulo/store', 'ArticuloController@store');
 Route::post('articulo/actualizar', 'ArticuloController@edit');

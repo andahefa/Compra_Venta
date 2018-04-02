@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-
-    <style>
-      button.btn{
-
-      font-family: "'Open Sans', sans-serif";
-
-      }
-
-    </style>        
+    <head>        
         <!-- META SECTION -->
         <title>Control Inventario</title>            
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -20,8 +11,17 @@
         <!-- END META SECTION -->
         
         <!-- CSS INCLUDE -->        
-        <link rel="stylesheet" type="text/css" id="theme" href="css/theme-default.css"/>
-        <!-- EOF CSS INCLUDE -->                                    
+        <link rel="stylesheet" type="text/css" id="theme" href="../css/theme-default.css"/>
+        <!-- EOF CSS INCLUDE --> 
+
+ 
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+          <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                                 
     </head>
     <body>
         <!-- START PAGE CONTAINER -->
@@ -37,11 +37,11 @@
                     </li>
                     <li class="xn-profile">
                         <a href="#" class="profile-mini">
-                            <img src="assets/images/users/avatar.jpg" alt="John Doe"/>
+                            <img src="../images/users/avatar.jpg" alt="John Doe"/>
                         </a>
                         <div class="profile">
                             <div class="profile-image">
-                                <img src="assets/images/users/avatar.jpg" alt="John Doe"/>
+                                <img src="../images/users/avatar.jpg" alt="John Doe"/>
                             </div>
                             <div class="profile-data">
                                 <div class="profile-data-name">John Doe</div>
@@ -55,11 +55,8 @@
                     </li>
                     <li class="xn-title">Navigation</li>
                     <li class="active">
-                        <a href="/index"><span class="glyphicon glyphicon-list"></span> <span class="xn-text">Inventario Articulos</span></a>                        
-                    </li>
-                     <li>
-                        <a href="/categorias"><span class="glyphicon glyphicon-tags"></span> <span class="xn-text">Categoria</span></a>                        
-                    </li>                      
+                        <a href="/index"><span class="fa fa-desktop"></span> <span class="xn-text">Inventario</span></a>                        
+                    </li>                    
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-cogs"></span> <span class="xn-text">UI Kits</span></a>                        
                         <ul>
@@ -117,25 +114,25 @@
                             <div class="panel-body list-group list-group-contacts scroll" style="height: 200px;">
                                 <a href="#" class="list-group-item">
                                     <div class="list-group-status status-online"></div>
-                                    <img src="assets/images/users/user2.jpg" class="pull-left" alt="John Doe"/>
+                                    <img src="../images/users/user2.jpg" class="pull-left" alt="John Doe"/>
                                     <span class="contacts-title">John Doe</span>
                                     <p>Praesent placerat tellus id augue condimentum</p>
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <div class="list-group-status status-away"></div>
-                                    <img src="assets/images/users/user.jpg" class="pull-left" alt="Dmitry Ivaniuk"/>
+                                    <img src="../images/users/user.jpg" class="pull-left" alt="Dmitry Ivaniuk"/>
                                     <span class="contacts-title">Dmitry Ivaniuk</span>
                                     <p>Donec risus sapien, sagittis et magna quis</p>
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <div class="list-group-status status-away"></div>
-                                    <img src="assets/images/users/user3.jpg" class="pull-left" alt="Nadia Ali"/>
+                                    <img src="../images/users/user3.jpg" class="pull-left" alt="Nadia Ali"/>
                                     <span class="contacts-title">Nadia Ali</span>
                                     <p>Mauris vel eros ut nunc rhoncus cursus sed</p>
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <div class="list-group-status status-offline"></div>
-                                    <img src="assets/images/users/user6.jpg" class="pull-left" alt="Darth Vader"/>
+                                    <img src="../images/users/user6.jpg" class="pull-left" alt="Darth Vader"/>
                                     <span class="contacts-title">Darth Vader</span>
                                     <p>I want my money back!</p>
                                 </a>
@@ -205,99 +202,46 @@
 
                 <!-- Se incluye la vista inventario-->                      
 
-                <div class="container">
-                <h2><center><b>Inventario de Articulos</b></center></h2>
-                <a href="articulo/create"><button class="btn btn-info"><span class="glyphicon glyphicon-plus-sign"> Nuevo Articulo</span></button></a>
-                <div>
-                  <table class="table table-condensed table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Categoria</th>
-                        <th>Estado</th>
-                        <th>Marca</th>
-                        <th>Referencia</th>
-                        <th>Descripción</th>
-                        <th>Editar</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($articulos as $articulo)
-                        <tr>
-                        <td style="display:none">{{$articulo['id']}}</td>
-                        <td>{{$articulo['categoria']}}</td>
-                        <td>{{$articulo['estado']}}</td>
-                        <td>{{$articulo['marca']}}</td>
-                        <td>{{$articulo['referencia']}}</td>
-                        <td>{{$articulo['descripcion']}}</td>
-                        <td>
-                            <button type="button" name="editar" id="Editar" onclick="cargarArticulo('{{$articulo['id']}}','{{$articulo['categoria']}}','{{$articulo['estado']}}','{{$articulo['marca']}}','{{$articulo['referencia']}}','{{$articulo['descripcion']}}')" class="btn">
-                            <span class="glyphicon glyphicon-edit"></span> Editar
-                            </button>
-                        </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                  </table>
-              </div>
-                </div>
-                  
-                   <!-- Modal Producto-->
-                
-                  <div class="modal fade" id="modalEditarArticulo" role="dialog">
-                    <div class="modal-dialog">
-                    
-                      <!-- Modal content-->
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
-                          <center><h4 class="modal-title"><b>Editar Articulo</b></h4></center>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                              <label style="display: none">Id</label>
-                              <input style="display: none" type="text" class="form-control input-sm" name="id" id="id">
-                              <label>Categoria</label>
-                              <select id="categoria" name="categoria" class="form-control">
-                                    @foreach($categorias as $categoria)
-                                   <option id="{{$categoria['nombre']}}" value="{{$categoria['id_categoria']}}">{{$categoria['nombre']}}</option>
-                                    @endforeach
-                              </select>
-    
-                                <label>Estado</label>
-                               
-                                <select class="form-control" id="estado" name="name">
-                                     @foreach($estados as $estado)
-                                    <option id="{{$estado['nombre']}}" value="{{$estado['id_estado_articulo']}}">{{$estado['nombre']}}</option>
-                                     @endforeach
-                                </select>
-                            
-                              <label>Marca</label>
-                              <input type="text" class="form-control input-sm" name="marca" id="marca">
-                              <label>Referencia</label>
-                              <input type="text" class="form-control input-sm" name="referencia" id="referencia">
-                              <label>Descripción</label>
-                              <textarea rows="3" class="form-control input-sm" name="descripcion" id="descripcion"></textarea>
+   
+              <div class="container">
+                        
+                        <h4 align="center"><b>Nuevo Articulo</b></h4>
 
-                                  @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                             @endforeach
-                                        </ul>
-                                    </div><br />
-                                 @endif
-                            </div>
-                             
+                        <div class="form-group">
+                            <form method="post" action="/articulo/store">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <label>Categoria</label>
+                            <select class="form-control" id="categoria" name="categoria">
+                                <option value="0">Seleccione...</option>
+                                @foreach($tipos as $t )
+                                <option value="{{$t->id_categoria}}">{{$t->nombre}}</option>
+                                @endforeach
+                            </select>
+                        
+                            <label>Marca</label>
+                            <input type="text" class="form-control" id="marca" name="marca" required="">
+
+                            <label>Referencia</label>
+                            <input type="text" class="form-control" id="referencia" name="referencia" required="">
+
+                            <label>Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" required="">
+
+
+                            <label>Estado</label>
+                            <select class="form-control" id="estado" name="estado">
+                                <option value="0">Seleccione...</option>
+                                @foreach($estados as $estado)
+                                <option value="{{$estado->id_estado_articulo}}">{{$estado->nombre}}</option>
+                                @endforeach
+                            </select>
+                            <input id="btnGuardar" class="btn btn-success" type="submit" value="Guardar">
+                            </input>
+                            <a href="/index"><input type="button" id="btnCancelar" class="btn btn-default" value="Cancelar"></input></a>
+                           
                         </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <input type="button" class="btn btn-success" data-dismiss="modal" value="Guardar" onclick="editarArticulo()"></input>
-                        </div>
-                      </div>
-                      
-                    </div>
-                  </div>
+                        </form>
+            </div>
                 
                 <!-- END PAGE CONTENT WRAPPER -->                                
             </div>            
@@ -325,100 +269,6 @@
         </div>
         <!-- END MESSAGE BOX-->
 
-        <script type="text/javascript">
-
-        function cargarArticulo(id,categoria,estado,marca,referencia,descripcion){
-
-            $('#modalEditarArticulo').modal('show');
-            $('#id').val(id);
-            document.getElementById(categoria).selected = "true";
-            document.getElementById(estado).selected = "true";
-            $('#marca').val(marca);
-            $('#referencia').val(referencia);
-            $('#descripcion').val(descripcion);
-
-        }
-
-        function editarArticulo(){
-
-            var id = $('#id').val();
-            var categoria = $('#categoria').val();
-            var estado = $('#estado').val();
-            var marca = $('#marca').val();
-            var referencia = $('#referencia').val();
-            var descripcion = $('#descripcion').val();
-
-                $.ajax({
-                    type:'post',
-                    url:"articulo/actualizar",
-                    data:{
-                        '_token': '{{csrf_token()}}',
-                        'id': id,
-                        'categoria':categoria,
-                        'estado':estado,
-                        'marca':marca,
-                        'referencia':referencia,
-                        'descripcion':descripcion
-                    },
-                    success: function(result){
-
-                        alert('actualizado con exito');
-                        location.reload();
-                    },
-                     error: function(data){
-
-                             /*Se validan que no existan mensages de errores,
-                               si existe se eliminan*/
-                         
-                            var mensaje = document.getElementById("errorMarca");
-                            if(mensaje != null){
-                                mensaje.remove();
-                            }
-                            mensaje = document.getElementById("errorReferencia");
-                            if(mensaje != null){
-                                mensaje.remove();
-                            }
-                            mensaje = document.getElementById("errorDescripcion");
-                            if(mensaje != null){
-                                mensaje.remove();
-                            }
-
-                            if((data.responseText)){
-
-                                var errors = $.parseJSON(data.responseText);
-        
-                                setTimeout(function () {
-                                    $('#modalEditarArticulo').modal('show');
-
-                                    if(errors.marca){
-                                    
-                                        var newTr = "<div><label id ='errorMarca' class='label label-danger'><strong>Warning! </strong>"+errors.marca+"</label></div>";
-                                        $('#marca').after(newTr);
-                                    }
-                                    if(errors.referencia){
-                                    
-                                        var newTr = "<div><label id ='errorReferencia' class='label label-danger'><strong>Warning! </strong>"+errors.referencia+"</label></div>";
-                                        $('#referencia').after(newTr);
-                                    }
-                                    if(errors.descripcion){
-
-                                        var newTr = "<div><label class = 'label label-danger' id ='errorDescripcion'><strong>Warning! </strong>"+errors.descripcion+"</label></div>";
-                                         $('#descripcion').after(newTr);
-                                    }
-                            }, 500);
-
-                            }
-                            
-
-                    }   
-
-                });
-
-               
-        }
-
-        </script>
-
         <!-- START PRELOADS -->
         <audio id="audio-alert" src="audio/alert.mp3" preload="auto"></audio>
         <audio id="audio-fail" src="audio/fail.mp3" preload="auto"></audio>
@@ -426,36 +276,36 @@
         
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
-        <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
+        <script type="text/javascript" src="../js/plugins/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="../js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="../js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
 
         <!-- START THIS PAGE PLUGINS-->        
-        <script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>        
-        <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
-        <script type="text/javascript" src="js/plugins/scrolltotop/scrolltopcontrol.js"></script>
+        <script type='text/javascript' src='../js/plugins/icheck/icheck.min.js'></script>        
+        <script type="text/javascript" src="../js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+        <script type="text/javascript" src="../js/plugins/scrolltotop/scrolltopcontrol.js"></script>
         
-        <script type="text/javascript" src="js/plugins/morris/raphael-min.js"></script>
-        <script type="text/javascript" src="js/plugins/morris/morris.min.js"></script>       
-        <script type="text/javascript" src="js/plugins/rickshaw/d3.v3.js"></script>
-        <script type="text/javascript" src="js/plugins/rickshaw/rickshaw.min.js"></script>
-        <script type='text/javascript' src='js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
-        <script type='text/javascript' src='js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js'></script>                
-        <script type='text/javascript' src='js/plugins/bootstrap/bootstrap-datepicker.js'></script>                
-        <script type="text/javascript" src="js/plugins/owl/owl.carousel.min.js"></script>                 
+        <script type="text/javascript" src="../js/plugins/morris/raphael-min.js"></script>
+        <script type="text/javascript" src="../js/plugins/morris/morris.min.js"></script>       
+        <script type="text/javascript" src="../js/plugins/rickshaw/d3.v3.js"></script>
+        <script type="text/javascript" src="../js/plugins/rickshaw/rickshaw.min.js"></script>
+        <script type='text/javascript' src='../js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
+        <script type='text/javascript' src='../js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js'></script>                
+        <script type='text/javascript' src='../js/plugins/bootstrap/bootstrap-datepicker.js'></script>                
+        <script type="text/javascript" src="../js/plugins/owl/owl.carousel.min.js"></script>                 
         
-        <script type="text/javascript" src="js/plugins/moment.min.js"></script>
-        <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>
+        <script type="text/javascript" src="../js/plugins/moment.min.js"></script>
+        <script type="text/javascript" src="../js/plugins/daterangepicker/daterangepicker.js"></script>
         <!-- END THIS PAGE PLUGINS-->        
 
         <!-- START TEMPLATE -->
-        <script type="text/javascript" src="js/settings.js"></script>
+        <script type="text/javascript" src="../js/settings.js"></script>
         
-        <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>
+        <script type="text/javascript" src="../js/plugins.js"></script>        
+        <script type="text/javascript" src="../js/actions.js"></script>
         
-        <script type="text/javascript" src="js/demo_dashboard.js"></script>
+        <script type="text/javascript" src="../js/demo_dashboard.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->       
 
