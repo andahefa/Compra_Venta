@@ -1969,8 +1969,6 @@ ul.panel-controls > li > .dropdown-menu:before {
   line-height: 20px;
   font-weight: 400;
   -moz-border-radius: 0px;
-  -webkit-border-radius: 0px;
-  border-radius: 0px;
   -webkit-transition: all 200ms ease;
   -moz-transition: all 200ms ease;
   -ms-transition: all 200ms ease;
@@ -2054,10 +2052,7 @@ ul.panel-controls > li > .dropdown-menu:before {
   background: #acc780;
   border-color: #a7c479;
 }
-.btn-primary {
-  background-color: #1b1e24;
-  border-color: #1b1e24;
-}
+
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,

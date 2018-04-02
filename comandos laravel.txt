@@ -1,0 +1,7 @@
+crear controlador
+
+php artisan make:controller PhotoController --resource
+
+crear modelo
+
+php artisan make:model Widget -m

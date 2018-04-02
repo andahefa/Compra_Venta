@@ -3,10 +3,9 @@
     <head>
 
     <style>
-      button.btn{
-
-      font-family: "'Open Sans', sans-serif";
-
+    
+      #articulos{
+        margin: 20px;
       }
 
     </style>        
@@ -207,9 +206,9 @@
 
                 <div class="container">
                 <h2><center><b>Inventario de Articulos</b></center></h2>
-                <a href="articulo/create"><button class="btn btn-info"><span class="glyphicon glyphicon-plus-sign"> Nuevo Articulo</span></button></a>
+                <a href="articulo/create"><button id="nuevoArticulo" class="btn btn-info"><span class="glyphicon glyphicon-plus-sign"> Nuevo Articulo</span></button></a>
                 <div>
-                  <table class="table table-condensed table-bordered">
+                  <table id="articulos" class="table table-condensed table-bordered">
                     <thead>
                       <tr>
                         <th>Categoria</th>

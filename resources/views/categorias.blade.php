@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>        
+    <head>
+
+     <style>
+      #categorias{
+        width: 50%;
+        margin: 60px 0px 0px 290px;
+      }
+
+      #editar{
+        padding: 2px 12px;
+      }
+
+      #eliminar{
+        padding: 2px 12px;
+      }
+
+      #nuevaCategoria{
+
+        position: absolute;
+        left: 65%;
+        padding: 4px 9px;
+      }
+    </style>           
         <!-- META SECTION -->
         <title>Control Inventario</title>            
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -54,9 +76,12 @@
                         </div>                                                                        
                     </li>
                     <li class="xn-title">Navigation</li>
-                    <li class="active">
-                        <a href="/index"><span class="fa fa-desktop"></span> <span class="xn-text">Inventario</span></a>                        
-                    </li>                    
+                   <li>
+                        <a href="/index"><span class="glyphicon glyphicon-list"></span> <span class="xn-text">Inventario Articulos</span></a>                        
+                    </li>
+                     <li class="active">
+                        <a href="/categorias"><span class="glyphicon glyphicon-tags"></span> <span class="xn-text">Categorias</span></a>                        
+                    </li>                       
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-cogs"></span> <span class="xn-text">UI Kits</span></a>                        
                         <ul>
@@ -198,49 +223,58 @@
                     <li><a href="#">Home</a></li>                    
                     <li class="active">Dashboard</li>
                 </ul>
-                <!-- END BREADCRUMB --> 
+                <!-- END BREADCRUMB -->                
 
-                <!-- Se incluye la vista inventario-->                      
+                <div class="container">
+                      <h2><center><b>Categorias</b></center></h2>
+                     <div>
+                               <a href=""><button class="btn btn-primary" id="nuevaCategoria">Nueva Categoria</button></a> 
+                             </div>
+                      <div>
+                          <table class="table table-condensed table-bordered" id="categorias">
+                             
+                            <thead>
+                              <tr>
+                                <th>Id</th>
+                                <th>Nombre</th>
+                                <th>Editar</th>
+                                <th>Eliminar</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($categorias as $categoria)
+                            <tr>
+                                <td>{{$categoria->id_categoria}}</td>
+                                <td>{{$categoria->nombre}}</td>
+                                <td><button value="{{$categoria->id_categoria}}" id="editar" class="btn btn-warning" onclick="editarCategoria()">Editar</button></td>
+                                <td><button value="{{$categoria->id_categoria}}" id="eliminar" class="btn btn-danger">Eliminar</button></td>
+                            </tr>
+                            @endforeach
+                            </tbody>
+                          </table>
+                      </div>
+                </div>
+         
+         <!-- Modal editar categoria-->
 
-   
-              <div class="container">
-                        
-                        <h4 align="center"><b>Nuevo Articulo</b></h4>
+                     <div id="editarCategoria" class="modal fade" role="dialog">
+              <div class="modal-dialog">
 
-                        <div class="form-group">
-                            <form method="post" action="/articulo/store">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <label>Categoria</label>
-                            <select class="form-control" id="categoria" name="categoria">
-                                <option value="0">Seleccione...</option>
-                                @foreach($tipos as $t )
-                                <option value="{{$t->id_categoria}}">{{$t->nombre}}</option>
-                                @endforeach
-                            </select>
-                        
-                            <label>Marca</label>
-                            <input type="text" class="form-control" id="marca" name="marca" required="">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
 
-                            <label>Referencia</label>
-                            <input type="text" class="form-control" id="referencia" name="referencia" required="">
-
-                            <label>Descripción</label>
-                            <input type="text" class="form-control" id="descripcion" name="descripcion" required="">
-
-
-                            <label>Estado</label>
-                            <select class="form-control" id="estado" name="estado">
-                                <option value="0">Seleccione...</option>
-                                @foreach($estados as $estado)
-                                <option value="{{$estado->id_estado_articulo}}">{{$estado->nombre}}</option>
-                                @endforeach
-                            </select>
-                            <input id="btnGuardar" class="btn btn-success" type="submit" value="Guardar">
-                            </input>
-                            <a href="/index"><input type="button" id="btnCancelar" class="btn btn-default" value="Cancelar"></input></a>
-                           
-                        </div>
-                        </form>
+              </div>
             </div>
                 
                 <!-- END PAGE CONTENT WRAPPER -->                                
@@ -267,6 +301,13 @@
                 </div>
             </div>
         </div>
+
+        <script type="text/javascript">
+            
+            function editarCategoria(){
+                  $('#editarCategoria').modal('show');
+            }
+        </script>
         <!-- END MESSAGE BOX-->
 
         <!-- START PRELOADS -->
