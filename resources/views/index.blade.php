@@ -6,7 +6,17 @@
     
       #articulos{
         margin: 20px;
+        width: 92%;
       }
+
+      #nuevoArticulo{
+        margin: 0px 0px 0px 20px;
+      }
+
+      #Editar{
+        padding: 2px 10px;
+      }
+
 
     </style>        
         <!-- META SECTION -->
@@ -24,10 +34,10 @@
 
         <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+          <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
           <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>                                   
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>                                 
     </head>
     <body>
         <!-- START PAGE CONTAINER -->
@@ -213,9 +223,7 @@
 
                 <div class="container">
                 <h2><center><b>Inventario de Articulos</b></center></h2>
-                <a href="articulo/create"><button id="nuevoArticulo" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"> Nuevo Articulo</span></button></a>
-                 <a href="articulo/create"><button id="nuevoArticulo" class="btn btn-primary">Nuevo Articulo</button></a>
-                <div>
+                 <a href="articulo/create"><button id="nuevoArticulo" class="btn btn-success add-more"><span class="glyphicon glyphicon-plus"> Nuevo</span></button></a>
                   <table id="articulos" class="table table-condensed table-bordered">
                     <thead>
                       <tr>
@@ -237,8 +245,8 @@
                         <td>{{$articulo['referencia']}}</td>
                         <td>{{$articulo['descripcion']}}</td>
                         <td>
-                            <button type="button" name="editar" id="Editar" onclick="cargarArticulo('{{$articulo['id']}}','{{$articulo['categoria']}}','{{$articulo['estado']}}','{{$articulo['marca']}}','{{$articulo['referencia']}}','{{$articulo['descripcion']}}')" class="btn">
-                            <span class="glyphicon glyphicon-edit"></span> Editar
+                            <button type="button" name="editar" id="Editar" onclick="cargarArticulo('{{$articulo['id']}}','{{$articulo['categoria']}}','{{$articulo['estado']}}','{{$articulo['marca']}}','{{$articulo['referencia']}}','{{$articulo['descripcion']}}')" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-edit"></span>
                             </button>
                         </td>
                         </tr>

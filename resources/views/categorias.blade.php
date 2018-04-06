@@ -17,9 +17,9 @@
       }
 
       #nuevaCategoria{
-
+        margin: 0px 0px 0px 760px;
         position: absolute;
-        left: 65%;
+        /*left: 65%;*/
         padding: 4px 9px;
       }
     </style>           
@@ -228,26 +228,24 @@
                 <div class="container">
                       <h2><center><b>Categorias</b></center></h2>
                      <div>
-                               <a href=""><button class="btn btn-primary" id="nuevaCategoria">Nueva Categoria</button></a> 
+                               <a href=""><button class="btn btn-success add-more" id="nuevaCategoria"><span class="glyphicon glyphicon-plus"> Agregar</span></button></a> 
                              </div>
                       <div>
                           <table class="table table-condensed table-bordered" id="categorias">
                              
                             <thead>
                               <tr>
-                                <th>Id</th>
-                                <th>Nombre</th>
-                                <th>Editar</th>
-                                <th>Eliminar</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">Editar</th>
+                                <th class="text-center">Eliminar</th>
                               </tr>
                             </thead>
                             <tbody>
                             @foreach($categorias as $categoria)
                             <tr>
-                                <td>{{$categoria->id_categoria}}</td>
                                 <td>{{$categoria->nombre}}</td>
-                                <td><button value="{{$categoria->id_categoria}}" id="editar" class="btn btn-warning" onclick="editarCategoria()">Editar</button></td>
-                                <td><button value="{{$categoria->id_categoria}}" id="eliminar" class="btn btn-danger">Eliminar</button></td>
+                                <td align="center"><button id="editar" class="btn btn-primary" onclick="editarCategoria('{{$categoria->id_categoria}}', '{{$categoria->nombre}}')" ><span class="glyphicon glyphicon-edit"></span></button></td>
+                                <td align="center"><button id="eliminar" class="btn btn-danger remove"><span class="glyphicon glyphicon-remove"></span></button></td>
                             </tr>
                             @endforeach
                             </tbody>
@@ -264,13 +262,16 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Modal Header</h4>
+                    <h4 class="modal-title" align="center">Editar Categoria</h4>
                   </div>
                   <div class="modal-body">
-                    <p>Some text in the modal.</p>
+                    <input type="text" name="idCategoria" id="idCategoria" style="display: none">
+                    <label class="form.control">Nombre:</label>
+                    <input type="text" name="nombreModal" id="nombreModal" class="form-control">
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-success">Guardar</button>
                   </div>
                 </div>
 
@@ -304,8 +305,9 @@
 
         <script type="text/javascript">
             
-            function editarCategoria(){
+            function editarCategoria(idCategoria, nombre){
                   $('#editarCategoria').modal('show');
+                  $('#nombreModal').val(nombre);
             }
         </script>
         <!-- END MESSAGE BOX-->
