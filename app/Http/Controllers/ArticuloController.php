@@ -79,7 +79,7 @@ class ArticuloController extends Controller
         ]);
 
         $articulo->save();
-        return redirect('articulo/createArticulo');
+        return redirect('articulo/create');
     }
 
     /**
