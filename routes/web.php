@@ -18,6 +18,8 @@ Route::get('/categorias','CategoriasController@index');
 Route::get('articulo/create','ArticuloController@create');
 Route::post('articulo/store', 'ArticuloController@store');
 Route::post('articulo/actualizar', 'ArticuloController@edit');
+Route::resource('categorias', 'CategoriasController');
+
 
 
 //Route::post('/producto/store', ['uses' => 'ProductoController@store', 'as' => 'producto.store']);

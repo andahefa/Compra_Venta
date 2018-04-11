@@ -56,7 +56,7 @@ class ArticuloController extends Controller
         $cateArtic = Categoria_Articulo::orderBy('id_categoria')->get();
         $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
 
-          return view('create')
+          return view('createArticulo')
             ->with(['tipos' =>$cateArtic, 'estados' => $estados]);
     }
 
@@ -79,7 +79,7 @@ class ArticuloController extends Controller
         ]);
 
         $articulo->save();
-        return redirect('articulo/create');
+        return redirect('articulo/createArticulo');
     }
 
     /**

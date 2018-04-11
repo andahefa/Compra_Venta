@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Categoria_Articulo;
+use Illuminate\Support\Facades\Validator;
 
 class CategoriasController extends Controller
 {
@@ -40,6 +41,9 @@ class CategoriasController extends Controller
     public function store(Request $request)
     {
         //
+        error_log("pruebaaaaaaaaaaaaaa");
+    
+        error_log($request);
     }
 
     /**
@@ -85,5 +89,10 @@ class CategoriasController extends Controller
     public function destroy($id)
     {
         //
+
+        $categoria = Categoria_Articulo::where('id_categoria', '=', $id)->delete();
+        session()->flash('success','Categoria Eliminada Correctamente');
+        return redirect()->route('categorias.index');
+                            
     }
 }
