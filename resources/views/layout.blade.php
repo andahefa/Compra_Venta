@@ -103,7 +103,10 @@
                     </li>
                      <li>
                         <a href="/categorias"><span class="glyphicon glyphicon-tags"></span> <span class="xn-text">Categoria</span></a>                        
-                    </li>                      
+                    </li>
+                      <li>
+                        <a href="/contratos"><span class="glyphicon glyphicon-list-alt"></span> <span class="xn-text">Contratos</span></a>                        
+                    </li>                        
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-cogs"></span> <span class="xn-text">UI Kits</span></a>                        
                         <ul>
