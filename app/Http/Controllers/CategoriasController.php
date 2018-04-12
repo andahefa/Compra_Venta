@@ -41,9 +41,14 @@ class CategoriasController extends Controller
     public function store(Request $request)
     {
         //
-        error_log("pruebaaaaaaaaaaaaaa");
-    
-        error_log($request);
+        $categoria = new Categoria_Articulo([
+          'id_categoria' => 0,
+          'nombre' => $request->get('nombre')
+        ]);
+
+        session()->flash('success','Categoria Creada Correctamente');
+        $categoria->save();
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -63,9 +68,26 @@ class CategoriasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         //
+
+         /*Validaciones de los campos*/
+
+         error_log($request);
+        $this->validate($request, [
+        'nombre' => 'required'
+        ]);
+
+            $categoria = Categoria_Articulo::find($request->get('idCategoria'));
+            $categoria->id_categoria = $request->get('idCategoria');
+            $categoria->nombre = $request->get('nombre');
+
+            $categoria->save();
+
+            // redirect
+            //Session::flash('message', 'Successfully updated nerd!');
+            return 1;
     }
 
     /**

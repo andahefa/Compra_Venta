@@ -19,6 +19,8 @@ Route::get('articulo/create','ArticuloController@create');
 Route::post('articulo/store', 'ArticuloController@store');
 Route::post('articulo/actualizar', 'ArticuloController@edit');
 Route::resource('categorias', 'CategoriasController');
+Route::post('categorias/crear', 'CategoriasController@store');
+Route::post('categorias/actualizar', 'CategoriasController@edit');
 
 
 

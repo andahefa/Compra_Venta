@@ -46,13 +46,13 @@
                 </div>
                    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
                         <script >
+
+                            /*Se valida que el registro se halla eliminado correctamente*/
                             @if(Session::has('success'))
                                         toastr.success("{{ Session::get('success') }}");
                                  
                               @endif
                             </script>
-
-                       
                    
 
                     <!-- Modal mensaje eliminacion de categoria-->
@@ -81,21 +81,27 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title" align="center">Editar Categoria</h4>
                   </div>
-                  <div class="modal-body">
-                    <input type="text" name="idCategoria" id="idCategoria" style="display: none">
-                    <label class="form.control">Nombre:</label>
-                    <input type="text" name="nombreModal" id="nombreModal" class="form-control">
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button class="btn btn-success">Guardar</button>
-                  </div>
+                  
+                  <form method="post" action="categorias/actualizar">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <div class="modal-body">
+                      <input type="text" name="idCategoria" id="idCategoria" style="display: none">
+                      <label class="form.control">Nombre:</label>
+                      <input type="text" name="nombre" id="nombre" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button class="btn btn-success">Guardar</button>
+                    </div>
+                  </form>
+                 
                 </div>
 
               </div>
             </div>
 
             <!-- Modal Crear Categoria-->
+
             <div id="crearCategoria" class="modal fade" role="dialog">
               <div class="modal-dialog">
 
@@ -106,13 +112,18 @@
                     <h4 class="modal-title" align="center">Nueva Categoria</h4>
                   </div>
                   <div class="modal-body">
-                    <label class="form.control">Nombre:</label>
-                    <input type="text" name="nombreModal" id="nombreModal" class="form-control">
+                    <form method="post" action="categorias/crear">
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                      <label class="form.control">Nombre:</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control">
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a href="{{ URL::to('categorias/store') }}"><button class="btn btn-success">Guardar</button></a>
+                    <button class="btn btn-success">Guardar</button>
                   </div>
+
+                    </form>
+                    
                 </div>
 
               </div>
@@ -132,8 +143,10 @@
 
                  function editarCategoria(idCategoria, nombre){
                       $('#editarCategoria').modal('show');
-                      $('#nombreModal').val(nombre);
-                 }
+                      $('#idCategoria').val(idCategoria);
+                      $('#nombre').val(nombre);
+
+                  }
 
                  function crearCategoria(){
                     $('#crearCategoria').modal('show');
