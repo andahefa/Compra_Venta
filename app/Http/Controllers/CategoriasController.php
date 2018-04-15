@@ -74,7 +74,6 @@ class CategoriasController extends Controller
 
          /*Validaciones de los campos*/
 
-         error_log($request);
         $this->validate($request, [
         'nombre' => 'required'
         ]);

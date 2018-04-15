@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Contratos;
+use App\Estado_Contrato;
+use App\Clientes;
 use Path\To\Your\Log;
 use DB;
-
+use Illuminate\Support\Facades\Validator;
 class ContratosController extends Controller
 {
     /**
@@ -19,11 +21,14 @@ class ContratosController extends Controller
         //
 
         $contratos = Contratos::orderBy('id_contrato')->get();
+        $estados = Estado_Contrato::orderBy('id_estado')->get();
+        $clientes = DB::select('Select* from clientes');
         $datos = [];
         $i = 0;
 
         foreach ($contratos as $contrato) {
-            $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);
+
+            $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);           
             $datos[$i]["idContrato"] = $contrato->id_contrato;
             $datos[$i]["numCedula"] = $contrato->num_cedula_cliente;
             $datos[$i]["estadoContrato"] = $estadoContrato[0]->nombre;
@@ -33,7 +38,7 @@ class ContratosController extends Controller
 
             $i = $i+1;      
         }
-        return view('contratos') ->with(['datos' =>$datos]);
+        return view('contratos') ->with(['datos' =>$datos, 'estados' => $estados, 'clientes' => $clientes]);
     }
 
     /**
@@ -55,6 +60,9 @@ class ContratosController extends Controller
     public function store(Request $request)
     {
         //
+
+
+
     }
 
     /**
@@ -74,9 +82,30 @@ class ContratosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         //
+
+        $this->validate($request, [
+        'cedula' => 'required',
+        'estado' => 'required',
+        'valorPrestado' => 'required',
+        'fechaPrestamo' => 'required',
+        'valorIntereses' => 'required'
+        ]);
+
+            $contrato = Contratos::find($request->get('idContrato'));
+            $contrato->id_estado_contrato = $request->get('idContrato');
+            $contrato->num_cedula_cliente = $request->get('cedula');
+            $contrato->id_estado_contrato = $request->get('estado');
+            $contrato->valor_prestado = $request->get('valorPrestado');
+            $contrato->fecha_prestamo = $request->get('fechaPrestamo');
+            $contrato->valor_intereses = $request->get('valorIntereses');
+
+            $contrato->save();
+
+            session()->flash('success','Contrato Modificado Correctamente');
+            return redirect()->route('contratos.index');
     }
 
     /**
@@ -89,6 +118,8 @@ class ContratosController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+   
     }
 
     /**

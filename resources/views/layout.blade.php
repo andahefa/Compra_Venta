@@ -281,6 +281,8 @@
         </div>
         <!-- END MESSAGE BOX-->
 
+        <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+
         <script type="text/javascript">
 
         function cargarArticulo(id,categoria,estado,marca,referencia,descripcion){
@@ -367,7 +369,7 @@
 
                     }   
 
-                });
+                });              
        
         }
       

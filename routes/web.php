@@ -21,6 +21,8 @@ Route::post('articulo/actualizar', 'ArticuloController@edit');
 Route::resource('categorias', 'CategoriasController');
 Route::post('categorias/crear', 'CategoriasController@store');
 Route::post('categorias/actualizar', 'CategoriasController@edit');
+Route::post('contratos/actualizar', 'ContratosController@edit');
+Route::post('contratos/crear', 'ContratosController@store');
 Route::resource('contratos', 'ContratosController');
 
 

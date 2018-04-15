@@ -48,15 +48,17 @@
                     <h4 class="modal-title" align="center">Editar Contrato</h4>
                   </div>
                   
-                  <form method="post" action="categorias/actualizar">
+                  <form method="post" action="contratos/actualizar">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="modal-body">
                       <input type="text" name="idContrato" id="idContrato" style="display: none">
                       <label class="form.control">Cedula:</label>
                       <input type="number" name="cedula" id="cedula" class="form-control">
                       <label class="form.control">Estado Contrato:</label>
-                      <select class="form-control" id="estado">
-                      	<option></option>
+                      <select class="form-control" id="estado" name="estado">
+                        @foreach($estados as $estado)
+                      	<option value="{{$estado->id_estado}}" id="{{$estado->nombre}}">{{$estado->nombre}}</option>
+                        @endforeach
                       </select>
                       <label class="form.control">Valor Prestado:</label>
                       <input type="number" name="valorPrestado" id="valorPrestado" class="form-control">
@@ -88,10 +90,30 @@
                     <h4 class="modal-title" align="center">Nuevo Contrato</h4>
                   </div>
                   <div class="modal-body">
-                    <form method="post" action="categorias/crear">
+                    <form method="post" action="contratos/crear">
                       <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                      <label class="form.control">Nombre:</label>
-                    <input type="text" name="nombre" id="nombre" class="form-control">
+                      <input type="text" name="idContrato" id="idContrato" style="display: none">
+                      <label class="form.control">Cliente:</label>
+                      <select class="form-control" id="cliente" name="cliente">
+                        <option></option>
+                        @foreach($clientes as $cliente)
+                        <option>{{$cliente->num_cedula}} - {{$cliente->nombres}} {{$cliente->apellidos}}</option>
+                        @endforeach
+                          
+                      </select>
+                      <!--<input type="number" name="cedula" id="cedula" class="form-control">-->
+                      <label class="form.control">Estado Contrato:</label>
+                      <select class="form-control" id="estado" name="estado">
+                        @foreach($estados as $estado)
+                        <option value="{{$estado->id_estado}}" id="{{$estado->nombre}}">{{$estado->nombre}}</option>
+                        @endforeach
+                      </select>
+                      <label class="form.control">Valor Prestado:</label>
+                      <input type="number" name="valorPrestado" id="valorPrestado" class="form-control">
+                      <label class="form.control">Fecha Prestamo:</label>
+                      <input type="date" name="fechaPrestamo" id="fechaPrestamo" class="form-control">
+                      <label class="form.control">Valor Intereses</label>
+                      <input type="number" name="valorIntereses" id="valorIntereses" class="form-control">
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -105,6 +127,7 @@
               </div>
             </div>
 
+              <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
             <script>
             	
             	function confirmDelete()
@@ -117,19 +140,24 @@
                   }
 
 
-                 function editarContrato(idContrato, cedula, idEstadoContrato, valorPrestado, fechaPrestamo, valorIntereses){
+                 function editarContrato(idContrato, cedula, estadoContrato, valorPrestado, fechaPrestamo, valorIntereses){
                       $('#editarContrato').modal('show');
                       $('#idContrato').val(idContrato);
                       $('#cedula').val(cedula);
-                      $('#estado').val(idEstadoContrato);
+                      document.getElementById(estadoContrato).selected = "true";
                       $('#valorPrestado').val(valorPrestado);
                       $('#fechaPrestamo').val(fechaPrestamo);
                       $('#valorIntereses').val(valorIntereses);
-
                   }
 
                  function crearContrato(){
                     $('#crearContrato').modal('show');
                  }
+
+                   /*Se valida que el registro se halla eliminado correctamente*/
+                            @if(Session::has('success'))
+                                        toastr.success("{{ Session::get('success') }}");
+                                 
+                              @endif
             </script>
 @endsection
