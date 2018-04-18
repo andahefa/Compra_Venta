@@ -1,36 +1,37 @@
 @extends('layout')
 @section('content')
 
- <h2><center><b>Contratos</b></center></h2>
+ <h2><center><b>Clientes</b></center></h2>
                  <button id="nuevoArticulo" class="btn btn-success add-more" onclick="crearContrato()"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
                   <table id="articulos" class="table table-condensed table-bordered">
                     <thead>
                       <tr>
-                        <th>Cedula Cliente</th>
-                        <th>Nombres Cliente</th>
-                        <th>Apellidos Cliente</th>
-                        <th>Estado Contrato</th>
-                        <th>Valor Prestado</th>
-                        <th>Fecha Prestamo</th>
-                        <th>Valor Intereses</th>
+                        <th>Cedula</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Telefono</th>
+                        <th>Dirección Residencia</th>
                         <th>Editar</th>
+                        <th>Eliminar</th>
                       </tr>
                     </thead>
                     <tbody>
-                        @foreach($datos as $contrato)
+                        @foreach($clientes as $cliente)
                         <tr>
-                        <td style="display:none">{{$contrato['idContrato']}}</td>
-                        <td>{{$contrato['numCedula']}}</td>
-                        <td>{{$contrato['nombresCliente']}}</td>
-                        <td>{{$contrato['apellidosCliente']}}</td>
-                        <td>{{$contrato['estadoContrato']}}</td>
-                        <td>{{$contrato['valorPrestado']}}</td>
-                        <td>{{$contrato['fechaPrestamo']}}</td>
-                        <td>{{$contrato['intereses']}}</td>
+                        <td>{{$cliente->num_cedula}}</td>
+                        <td>{{$cliente->nombres}}</td>
+                        <td>{{$cliente->apellidos}}</td>
+                        <td>{{$cliente->telefono}}</td>
+                        <td>{{$cliente->direccion_residencia}}</td>
                         <td>
-                            <button type="button" name="editar" id="Editar" onclick="editarContrato('{{$contrato['idContrato']}}', '{{$contrato['numCedula']}}', '{{$contrato['nombresCliente']}}', '{{$contrato['apellidosCliente']}}', '{{$contrato['estadoContrato']}}', '{{$contrato['valorPrestado']}}', '{{$contrato['fechaPrestamo']}}', '{{$contrato['intereses']}}')" class="btn btn-primary">
+                            <button type="button" name="editar" id="Editar" onclick="editarCliente()" class="btn btn-primary">
                             <span class="glyphicon glyphicon-edit"></span>
                             </button>
+                        </td>
+                        <td >
+                            <button id="eliminar" class="btn btn-danger remove">
+                              <span class="glyphicon glyphicon-remove"></span>
+                            </button>     
                         </td>
                         </tr>
                         @endforeach
@@ -42,34 +43,25 @@
 
                  <!-- Modal editar Contrato-->
 
-            <div id="editarContrato" class="modal fade" role="dialog">
+            <div id="editarCliente" class="modal fade" role="dialog">
               <div class="modal-dialog">
 
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" align="center">Editar Contrato</h4>
+                    <h4 class="modal-title" align="center">Editar Cliente</h4>
                   </div>
                   
                   <form method="post" action="contratos/actualizar">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="modal-body">
                       <input type="text" name="idContrato" id="idContrato" style="display: none">
-                      <label class="form.control">Cliente:</label>
-                      <select class="form-control" id="cliente" name="cliente">
-                        
-                        @foreach($clientes as $cliente)
-                        <option>{{$cliente->num_cedula}} - {{$cliente->nombres}} {{$cliente->apellidos}}</option>
-                        @endforeach
-                          
-                      </select>
+                      <label class="form.control">Numero de Cedula:</label>
+                      <input type="text" name="cedula" id="cedula">
                       <label class="form.control">Estado Contrato:</label>
                       <select class="form-control" id="estado" name="estado">
-                        @foreach($estados as $estado)
-                      	<option value="{{$estado->id_estado}}" id="{{$estado->nombre}}">{{$estado->nombre}}</option>
-                        @endforeach
-                      </select>
+                    
                       <label class="form.control">Valor Prestado:</label>
                       <input type="number" name="valorPrestado" id="valorPrestado" class="form-control">
                       <label class="form.control">Fecha Prestamo:</label>
@@ -105,17 +97,13 @@
                       <input type="text" name="idContrato" id="idContrato" style="display: none">
                       <label class="form.control">Cliente:</label>
                       <select class="form-control" id="cliente" name="cliente">
-                        @foreach($clientes as $cliente)
-                        <option>{{$cliente->num_cedula}} - {{$cliente->nombres}} {{$cliente->apellidos}}</option>
-                        @endforeach
+                   
                           
                       </select>
                       <!--<input type="number" name="cedula" id="cedula" class="form-control">-->
                       <label class="form.control">Estado Contrato:</label>
                       <select class="form-control" id="estado" name="estado">
-                        @foreach($estados as $estado)
-                        <option value="{{$estado->id_estado}}" id="{{$estado->nombre}}">{{$estado->nombre}}</option>
-                        @endforeach
+                      
                       </select>
                       <label class="form.control">Valor Prestado:</label>
                       <input type="number" name="valorPrestado" id="valorPrestado" class="form-control">
@@ -153,8 +141,8 @@
                   /*funcion que me permite cargar el modal de editar y adicional
                   carga los valores a los respectivos campos del modal*/
 
-                 function editarContrato(idContrato, cedula, nombres, apellidos, estadoContrato, valorPrestado, fechaPrestamo, valorIntereses){
-                      $('#editarContrato').modal('show');
+                 function editarCliente(idContrato, cedula, nombres, apellidos, estadoContrato, valorPrestado, fechaPrestamo, valorIntereses){
+                      $('#editarCliente').modal('show');
                       $('#idContrato').val(idContrato);
                       $('#cliente').val(cedula + " - " + nombres + " " + apellidos);
                       document.getElementById(estadoContrato).selected = "true";
@@ -164,7 +152,7 @@
                   }
 
                   /*Funcion que permite cargar el modal de crear contrato*/
-                 function crearContrato(){
+                 function crearCliente(){
                     $('#crearContrato').modal('show');
                  }
 

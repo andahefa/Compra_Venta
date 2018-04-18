@@ -22,19 +22,22 @@ class ContratosController extends Controller
 
         $contratos = Contratos::orderBy('id_contrato')->get();
         $estados = Estado_Contrato::orderBy('id_estado')->get();
-        $clientes = DB::select('Select* from clientes');
+        $clientes = DB::select('Select * from clientes');
         $datos = [];
         $i = 0;
 
         foreach ($contratos as $contrato) {
 
-            $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);           
+            $nombreCliente = DB::select("Select * from clientes where num_cedula = '".$contrato->num_cedula_cliente."'" );
+            $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);         
             $datos[$i]["idContrato"] = $contrato->id_contrato;
             $datos[$i]["numCedula"] = $contrato->num_cedula_cliente;
             $datos[$i]["estadoContrato"] = $estadoContrato[0]->nombre;
             $datos[$i]["valorPrestado"] = $contrato->valor_prestado;
             $datos[$i]["fechaPrestamo"] = $contrato->fecha_prestamo;
             $datos[$i]["intereses"] = $contrato->valor_intereses;
+            $datos[$i]["nombresCliente"] = $nombreCliente[0]->nombres;
+            $datos[$i]["apellidosCliente"] = $nombreCliente[0]->apellidos;
 
             $i = $i+1;      
         }
@@ -60,6 +63,22 @@ class ContratosController extends Controller
     public function store(Request $request)
     {
         //
+
+        $cedula = explode("-", $request->get('cliente'));
+        $contrato = new Contratos([
+          'id_contrato' => 0,
+          'num_cedula_cliente' => $cedula[0],
+          'id_estado_contrato' => $request->get('estado'),
+          'valor_prestado' => $request->get('valorPrestado'),
+          'fecha_prestamo' => $request->get('fechaPrestamo'),
+          'valor_intereses' => $request->get('valorIntereses')
+          
+        ]);
+
+        
+        $contrato->save();
+        session()->flash('success','Contrato Creado Correctamente');
+        return redirect()->route('contratos.index');
 
 
 
@@ -87,16 +106,16 @@ class ContratosController extends Controller
         //
 
         $this->validate($request, [
-        'cedula' => 'required',
+        'cliente' => 'required',
         'estado' => 'required',
         'valorPrestado' => 'required',
         'fechaPrestamo' => 'required',
         'valorIntereses' => 'required'
         ]);
-
+            $cedula = explode("-", $request->get('cliente'));
             $contrato = Contratos::find($request->get('idContrato'));
             $contrato->id_estado_contrato = $request->get('idContrato');
-            $contrato->num_cedula_cliente = $request->get('cedula');
+            $contrato->num_cedula_cliente = $cedula[0];
             $contrato->id_estado_contrato = $request->get('estado');
             $contrato->valor_prestado = $request->get('valorPrestado');
             $contrato->fecha_prestamo = $request->get('fechaPrestamo');

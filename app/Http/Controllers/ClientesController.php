@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Categoria_Articulo;
-use Illuminate\Support\Facades\Validator;
+use App\Clientes;
 
-class CategoriasController extends Controller
+class ClientesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +15,10 @@ class CategoriasController extends Controller
     public function index()
     {
         //
-
-        $categorias = Categoria_Articulo::orderBy('id_categoria')->get();
-        return View('categorias')
-                ->with(['categorias'=>$categorias]);
+        $clientes = Clientes::orderBy('num_cedula')->get();
+           return view('clientes')
+            ->with(['clientes' =>$clientes] );
+          
     }
 
     /**
@@ -41,14 +40,6 @@ class CategoriasController extends Controller
     public function store(Request $request)
     {
         //
-        $categoria = new Categoria_Articulo([
-          'id_categoria' => 0,
-          'nombre' => $request->get('nombre')
-        ]);
-
-        $categoria->save();
-        session()->flash('success','Categoria Creada Correctamente');
-        return redirect()->route('categorias.index');
     }
 
     /**
@@ -68,24 +59,9 @@ class CategoriasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit($id)
     {
         //
-
-         /*Validaciones de los campos*/
-
-        $this->validate($request, [
-        'nombre' => 'required'
-        ]);
-
-            $categoria = Categoria_Articulo::find($request->get('idCategoria'));
-            $categoria->id_categoria = $request->get('idCategoria');
-            $categoria->nombre = $request->get('nombre');
-
-            // redirect
-            session()->flash('success', 'Categoria Actualizada Correctamente!');
-            $categoria->save();
-            return redirect()->route('categorias.index');
     }
 
     /**
@@ -109,10 +85,5 @@ class CategoriasController extends Controller
     public function destroy($id)
     {
         //
-
-        $categoria = Categoria_Articulo::where('id_categoria', '=', $id)->delete();
-        session()->flash('success','Categoria Eliminada Correctamente');
-        return redirect()->route('categorias.index');
-                            
     }
 }

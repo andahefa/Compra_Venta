@@ -20,6 +20,9 @@ class ArticuloController extends Controller
         $articulos = Articulo::orderBy('id_articulo')->get();
         $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
         $categorias = Categoria_Articulo::orderBy('id_categoria')->get();
+        $cateArtic = Categoria_Articulo::orderBy('id_categoria')->get();
+        $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
+
         $datos = [];
         $i = 0;
         foreach ($articulos as $articulo) {
@@ -41,7 +44,7 @@ class ArticuloController extends Controller
 
        
         return view('index')
-            ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias] );
+            ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias, 'tipos' =>$cateArtic, 'estados' => $estados] );
     }
 
     /**
@@ -79,7 +82,8 @@ class ArticuloController extends Controller
         ]);
 
         $articulo->save();
-        return redirect('articulo/create');
+        session()->flash('success','Articulo Creado Correctamente');
+        return redirect()->route('articulos.index');
     }
 
     /**
@@ -124,9 +128,8 @@ class ArticuloController extends Controller
 
             $articulo->save();
 
-            // redirect
-            //Session::flash('message', 'Successfully updated nerd!');
-            return 1;
+            session()->flash('success','Articulo Actualizado Correctamente');
+            return redirect()->route('articulos.index');
 
     }
 

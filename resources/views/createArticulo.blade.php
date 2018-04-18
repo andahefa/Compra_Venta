@@ -6,8 +6,8 @@
                         
                         <h4 align="center"><b>Nuevo Articulo</b></h4>
 
-                        <div class="form-group">
-                            <form method="post" action="/articulo/store">
+                <div class="form-group">
+                        <form method="post" action="/articulo/store">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <label>Categoria</label>
                             <select class="form-control" id="categoria" name="categoria">

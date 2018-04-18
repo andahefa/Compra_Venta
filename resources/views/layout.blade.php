@@ -106,7 +106,11 @@
                     </li>
                       <li>
                         <a href="/contratos"><span class="glyphicon glyphicon-list-alt"></span> <span class="xn-text">Contratos</span></a>                        
-                    </li>                        
+                    </li>
+                    <li>
+                        <a href="/clientes"><span class="glyphicon glyphicon-user"></span> <span class="xn-text">Clientes</span></a>                        
+                    </li>  
+                                           
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-cogs"></span> <span class="xn-text">UI Kits</span></a>                        
                         <ul>
@@ -285,6 +289,8 @@
 
         <script type="text/javascript">
 
+    /*
+
         function cargarArticulo(id,categoria,estado,marca,referencia,descripcion){
 
             $('#modalEditarArticulo').modal('show');
@@ -327,6 +333,7 @@
 
                              /*Se validan que no existan mensages de errores,
                                si existe se eliminan*/
+                               /*
                          
                             var mensaje = document.getElementById("errorMarca");
                             if(mensaje != null){
@@ -372,6 +379,7 @@
                 });              
        
         }
+        */
       
 
         </script>
