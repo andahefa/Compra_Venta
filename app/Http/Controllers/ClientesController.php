@@ -40,6 +40,21 @@ class ClientesController extends Controller
     public function store(Request $request)
     {
         //
+
+        $cliente = new Clientes([
+          'num_cedula' => $request->get('cedula'),
+          'nombres' => $request->get('nombres'),
+          'apellidos' => $request->get('apellidos'),
+          'telefono' => $request->get('telefono'),
+          'direccion_residencia' => $request->get('direccion')
+
+        ]);
+
+        
+        $cliente->save();
+        session()->flash('success','Cliente Creado Correctamente');
+        return redirect()->route('clientes.index');
+
     }
 
     /**
@@ -59,9 +74,27 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
         //
+
+        $this->validate($request, [
+        'cedula' => 'required',
+        'nombres' => 'required',
+        'apellidos' => 'required',
+        'telefono' => 'required',
+        'direccion' => 'required'
+        ]);
+            $cliente = Clientes::find($request->get('cedula'));
+            $cliente->nombres = $request->get('nombres');
+            $cliente->apellidos = $request->get('apellidos');
+            $cliente->telefono = $request->get('telefono');
+            $cliente->direccion_residencia = $request->get('direccion');
+
+            $cliente->save();
+
+            session()->flash('success','Cliente Modificado Correctamente');
+            return redirect()->route('clientes.index');
     }
 
     /**
@@ -85,5 +118,10 @@ class ClientesController extends Controller
     public function destroy($id)
     {
         //
+
+        $cliente = Clientes::where('num_cedula', '=', $id)->delete();
+        session()->flash('success','Cliente Eliminado Correctamente');
+        return redirect()->route('clientes.index');
+                            
     }
 }

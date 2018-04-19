@@ -2,7 +2,7 @@
 @section('content')
 
  <h2><center><b>Clientes</b></center></h2>
-                 <button id="nuevoArticulo" class="btn btn-success add-more" onclick="crearContrato()"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
+                 <button id="nuevoCliente" class="btn btn-success add-more" onclick="crearCliente()"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
                   <table id="articulos" class="table table-condensed table-bordered">
                     <thead>
                       <tr>
@@ -24,14 +24,14 @@
                         <td>{{$cliente->telefono}}</td>
                         <td>{{$cliente->direccion_residencia}}</td>
                         <td>
-                            <button type="button" name="editar" id="Editar" onclick="editarCliente()" class="btn btn-primary">
+                            <button type="button" name="editar" id="Editar" onclick="editarCliente('{{$cliente->num_cedula}}', '{{$cliente->nombres}}', '{{$cliente->apellidos}}', '{{$cliente->telefono}}', '{{$cliente->direccion_residencia}}')" class="btn btn-primary">
                             <span class="glyphicon glyphicon-edit"></span>
                             </button>
                         </td>
                         <td >
-                            <button id="eliminar" class="btn btn-danger remove">
-                              <span class="glyphicon glyphicon-remove"></span>
-                            </button>     
+                        {!! Form::open(['method' => 'DELETE','route' => ['clientes.destroy', $cliente->num_cedula],'style'=>'display:inline', 'onsubmit'=> 'return confirmDelete()']) !!}
+                                      {{ Form::button('<span class="glyphicon glyphicon-remove"></span>', array('type' => 'submit', 'class' => 'btn btn-danger', 'id' => 'eliminar')) }}
+                                      {!! Form::close() !!}     
                         </td>
                         </tr>
                         @endforeach
@@ -53,21 +53,20 @@
                     <h4 class="modal-title" align="center">Editar Cliente</h4>
                   </div>
                   
-                  <form method="post" action="contratos/actualizar">
+                  <form method="post" action="clientes/actualizar">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="modal-body">
                       <input type="text" name="idContrato" id="idContrato" style="display: none">
                       <label class="form.control">Numero de Cedula:</label>
-                      <input type="text" name="cedula" id="cedula">
-                      <label class="form.control">Estado Contrato:</label>
-                      <select class="form-control" id="estado" name="estado">
-                    
-                      <label class="form.control">Valor Prestado:</label>
-                      <input type="number" name="valorPrestado" id="valorPrestado" class="form-control">
-                      <label class="form.control">Fecha Prestamo:</label>
-                      <input type="date" name="fechaPrestamo" id="fechaPrestamo" class="form-control">
-                      <label class="form.control">Valor Intereses</label>
-                      <input type="number" name="valorIntereses" id="valorIntereses" class="form-control">
+                      <input type="number" name="cedula" id="cedula" class="form-control">
+                      <label class="form.control">Nombres:</label>
+                      <input type="text" class="form-control" id="nombres" name="nombres">
+                      <label class="form.control">Apellidos:</label>
+                      <input type="text" name="apellidos" id="apellidos" class="form-control">
+                      <label class="form.control">Telefono:</label>
+                      <input type="number" name="telefono" id="telefono" class="form-control">
+                      <label class="form.control">Dirección:</label>
+                      <input type="text" name="direccion" id="direccion" class="form-control">
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -80,44 +79,38 @@
               </div>
             </div>
 
-            <!-- Modal Crear Contrato-->
+            <!-- Modal Crear Cliente-->
 
-            <div id="crearContrato" class="modal fade" role="dialog">
+            <div id="crearCliente" class="modal fade" role="dialog">
               <div class="modal-dialog">
 
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" align="center">Nuevo Contrato</h4>
+                    <h4 class="modal-title" align="center">Nuevo Cliente</h4>
                   </div>
                   <div class="modal-body">
-                    <form method="post" action="contratos/crear">
-                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <form method="post" action="clientes/crear">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <div class="modal-body">
                       <input type="text" name="idContrato" id="idContrato" style="display: none">
-                      <label class="form.control">Cliente:</label>
-                      <select class="form-control" id="cliente" name="cliente">
-                   
-                          
-                      </select>
-                      <!--<input type="number" name="cedula" id="cedula" class="form-control">-->
-                      <label class="form.control">Estado Contrato:</label>
-                      <select class="form-control" id="estado" name="estado">
-                      
-                      </select>
-                      <label class="form.control">Valor Prestado:</label>
-                      <input type="number" name="valorPrestado" id="valorPrestado" class="form-control">
-                      <label class="form.control">Fecha Prestamo:</label>
-                      <input type="date" name="fechaPrestamo" id="fechaPrestamo" class="form-control">
-                      <label class="form.control">Valor Intereses</label>
-                      <input type="number" name="valorIntereses" id="valorIntereses" class="form-control">
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button class="btn btn-success">Guardar</button>
-                  </div>
-
-                    </form>
+                      <label class="form.control">Numero de Cedula:</label>
+                      <input type="number" name="cedula" id="cedula" class="form-control">
+                      <label class="form.control">Nombres:</label>
+                      <input type="text" class="form-control" id="nombres" name="nombres">
+                      <label class="form.control">Apellidos:</label>
+                      <input type="text" name="apellidos" id="apellidos" class="form-control">
+                      <label class="form.control">Telefono:</label>
+                      <input type="number" name="telefono" id="telefono" class="form-control">
+                      <label class="form.control">Dirección:</label>
+                      <input type="text" name="direccion" id="direccion" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button class="btn btn-success">Guardar</button>
+                    </div>
+                  </form>
                     
                 </div>
 
@@ -141,19 +134,18 @@
                   /*funcion que me permite cargar el modal de editar y adicional
                   carga los valores a los respectivos campos del modal*/
 
-                 function editarCliente(idContrato, cedula, nombres, apellidos, estadoContrato, valorPrestado, fechaPrestamo, valorIntereses){
+                 function editarCliente(cedula, nombres, apellidos, telefono, direccion){
                       $('#editarCliente').modal('show');
-                      $('#idContrato').val(idContrato);
-                      $('#cliente').val(cedula + " - " + nombres + " " + apellidos);
-                      document.getElementById(estadoContrato).selected = "true";
-                      $('#valorPrestado').val(valorPrestado);
-                      $('#fechaPrestamo').val(fechaPrestamo);
-                      $('#valorIntereses').val(valorIntereses);
+                      $('#cedula').val(cedula);
+                      $('#nombres').val(nombres);
+                      $('#apellidos').val(apellidos);
+                      $('#telefono').val(telefono);
+                      $('#direccion').val(direccion);
                   }
 
                   /*Funcion que permite cargar el modal de crear contrato*/
                  function crearCliente(){
-                    $('#crearContrato').modal('show');
+                    $('#crearCliente').modal('show');
                  }
 
                    /*Este if me permite validar los mensajes exitosos de las transacciones
@@ -162,5 +154,6 @@
                                         toastr.success("{{ Session::get('success') }}");
                                  
                               @endif
+
             </script>
 @endsection

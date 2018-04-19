@@ -26,8 +26,8 @@ Route::post('contratos/actualizar', 'ContratosController@edit');
 Route::post('contratos/crear', 'ContratosController@store');
 Route::resource('contratos', 'ContratosController');
 Route::resource('clientes', 'ClientesController');
-Route::get('/clientes','ClientesController@index');
-
+Route::post('clientes/crear', 'ClientesController@store');
+Route::post('clientes/actualizar', 'ClientesController@edit');
 
 
 //Route::post('/producto/store', ['uses' => 'ProductoController@store', 'as' => 'producto.store']);

@@ -14,6 +14,11 @@
         margin: 0px 0px 0px 20px;
       }
 
+      #nuevoCliente{
+
+        margin: 0px 0px 0px 20px;
+       }
+
       #Editar{
         padding: 2px 10px;
       }
@@ -101,16 +106,17 @@
                     <li class="active">
                         <a href="/index"><span class="glyphicon glyphicon-list"></span> <span class="xn-text">Inventario Articulos</span></a>                        
                     </li>
-                     <li>
+                     <li >
                         <a href="/categorias"><span class="glyphicon glyphicon-tags"></span> <span class="xn-text">Categoria</span></a>                        
                     </li>
                       <li>
                         <a href="/contratos"><span class="glyphicon glyphicon-list-alt"></span> <span class="xn-text">Contratos</span></a>                        
                     </li>
-                    <li>
+                    <li id="opcionClientes">
                         <a href="/clientes"><span class="glyphicon glyphicon-user"></span> <span class="xn-text">Clientes</span></a>                        
                     </li>  
-                                           
+                                       
+
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-cogs"></span> <span class="xn-text">UI Kits</span></a>                        
                         <ul>
