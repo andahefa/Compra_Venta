@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Clientes;
+use Illuminate\Support\Facades\Log;
 
 class ClientesController extends Controller
 {
@@ -12,6 +13,12 @@ class ClientesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    protected $result;
+    function __construct(\stdClass $result){
+        $this->result = $result;
+    }
+
     public function index()
     {
         //
@@ -78,21 +85,33 @@ class ClientesController extends Controller
     {
         //
 
-        $this->validate($request, [
+        error_log("Entreeeeeeeeeeeee al controladorrrr");
+        error_log($request);
+            $this->validate($request,[
+                'cedula' => 'required',
+                'nombres' => 'required',
+                'apellidos' => 'required',
+                'telefono' => 'required',
+                'direccion' => 'required'
+            ]);
+
+        /*
+        $validator = Validator::make($request->all(), [
         'cedula' => 'required',
         'nombres' => 'required',
         'apellidos' => 'required',
         'telefono' => 'required',
         'direccion' => 'required'
-        ]);
+        ]);*/
+
             $cliente = Clientes::find($request->get('cedula'));
             $cliente->nombres = $request->get('nombres');
             $cliente->apellidos = $request->get('apellidos');
             $cliente->telefono = $request->get('telefono');
             $cliente->direccion_residencia = $request->get('direccion');
 
-            $cliente->save();
 
+            $cliente->save();
             session()->flash('success','Cliente Modificado Correctamente');
             return redirect()->route('clientes.index');
     }

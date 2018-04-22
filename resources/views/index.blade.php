@@ -52,7 +52,7 @@
                                         <div class="form-group">
                                           <label style="display: none">Id</label>
                                           <input style="display: none" type="text" class="form-control input-sm" name="id" id="id">
-                                          <label>Categoria</label>
+                                          <label class="form.control">Categoria</label>
                                           <select id="categoria" name="categoria" class="form-control">
                                                 @foreach($categorias as $categoria)
                                                <option id="{{$categoria['nombre']}}" value="{{$categoria['id_categoria']}}">{{$categoria['nombre']}}</option>
@@ -68,11 +68,11 @@
                                             </select>
                                         
                                           <label>Marca</label>
-                                          <input type="text" class="form-control input-sm" name="marca" id="marca">
+                                          <input type="text" class="form-control" name="marca" id="marca">
                                           <label>Referencia</label>
-                                          <input type="text" class="form-control input-sm" name="referencia" id="referencia">
+                                          <input type="text" class="form-control" name="referencia" id="referencia">
                                           <label>Descripción</label>
-                                          <textarea rows="3" class="form-control input-sm" name="descripcion" id="descripcion"></textarea>
+                                          <textarea rows="3" class="form-control" name="descripcion" id="descripcion"></textarea>
 
                                               @if ($errors->any())
                                                 <div class="alert alert-danger">
@@ -166,10 +166,12 @@
                                 $('#crearArticulo').modal('show');
                             }
 
-                              /*Se valida que el registro se halla eliminado correctamente*/
-                                @if(Session::has('success'))
-                                            toastr.success("{{ Session::get('success') }}");
-                                     
-                                  @endif
+                            /*Se valida que el registro se halla eliminado correctamente*/
+                            @if(Session::has('success'))
+                                toastr.success("{{ Session::get('success') }}");                         
+                            @endif
+
+
+                            
                         </script>
             @endsection
