@@ -38,6 +38,7 @@ class ArticuloController extends Controller
             $datos[$i]["marca"] = $articulo->marca;
             $datos[$i]["referencia"] = $articulo->referencia;
             $datos[$i]["descripcion"] = $articulo->descripcion;
+             $datos[$i]["id_cliente"] = $articulo->id_cliente;
           
            $i= $i+1; 
         }

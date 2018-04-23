@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version 5.5.5-10.1.30-MariaDB)
-# Date: 2018-04-22 16:25:57
+# Date: 2018-04-22 16:39:07
 # Generator: MySQL-Front 6.0  (Build 2.20)
 
 
@@ -63,7 +63,7 @@ CREATE TABLE `clientes` (
 # Data for table "clientes"
 #
 
-INSERT INTO `clientes` VALUES (79205593,'Manuel','Hernandez',3207850643,'prueba'),(123456789,'Jhon','Muñoz',3214567654,'direccion de prueba'),(1020808853,'Anderson David','Hernandez Farias',3125968644,'direccion prueba');
+INSERT INTO `clientes` VALUES (79205593,'Manuel','Hernandez',3207850643,'prueba'),(123456789,'Jhon','Muñozjjj',3214567654,'direccion de prueba'),(1020808853,'Anderson David','Hernandez Farias',3125968644,'direccion prueba');
 
 #
 # Structure for table "estado_articulo"

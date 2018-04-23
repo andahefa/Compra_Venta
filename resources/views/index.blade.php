@@ -6,6 +6,7 @@
                               <table id="articulos" class="table table-condensed table-bordered">
                                 <thead>
                                   <tr>
+                                    <th>Cedula Cliente</th>
                                     <th>Categoria</th>
                                     <th>Estado</th>
                                     <th>Marca</th>
@@ -18,6 +19,7 @@
                                     @foreach($articulos as $articulo)
                                     <tr>
                                     <td style="display:none">{{$articulo['id']}}</td>
+                                    <td>{{$articulo['id_cliente']}}</td>
                                     <td>{{$articulo['categoria']}}</td>
                                     <td>{{$articulo['estado']}}</td>
                                     <td>{{$articulo['marca']}}</td>

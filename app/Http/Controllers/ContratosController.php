@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Contratos;
 use App\Estado_Contrato;
 use App\Clientes;
+use App\Articulo;
 use Path\To\Your\Log;
 use DB;
 use Illuminate\Support\Facades\Validator;
@@ -22,6 +23,11 @@ class ContratosController extends Controller
 
         $contratos = Contratos::orderBy('id_contrato')->get();
         $estados = Estado_Contrato::orderBy('id_estado')->get();
+        $articulos = DB::table('articulo')
+                    ->join('categoria_articulo', 'articulo.id_categoria', '=', 'categoria_articulo.id_categoria')
+                    ->join('estado_articulo', 'articulo.id_estado_articulo', '=', 'estado_articulo.id_estado_articulo')
+                    ->select('articulo.id_articulo','categoria_articulo.nombre as categoria', 'estado_articulo.nombre as estado', 'articulo.marca', 'articulo.referencia', 'articulo.descripcion' )
+                    ->get();
         $clientes = DB::select('Select * from clientes');
         $datos = [];
         $i = 0;
@@ -41,7 +47,7 @@ class ContratosController extends Controller
 
             $i = $i+1;      
         }
-        return view('contratos') ->with(['datos' =>$datos, 'estados' => $estados, 'clientes' => $clientes]);
+        return view('contratos') ->with(['datos' =>$datos, 'estados' => $estados, 'clientes' => $clientes, 'articulos' => $articulos]);
     }
 
     /**

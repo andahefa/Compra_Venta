@@ -24,7 +24,7 @@ class ClientesController extends Controller
         //
         $clientes = Clientes::orderBy('num_cedula')->get();
            return view('clientes')
-            ->with(['clientes' =>$clientes] );
+            ->with(['clientes' =>$clientes ]);
           
     }
 
@@ -84,9 +84,6 @@ class ClientesController extends Controller
     public function edit(Request $request)
     {
         //
-
-        error_log("Entreeeeeeeeeeeee al controladorrrr");
-        error_log($request);
             $this->validate($request,[
                 'cedula' => 'required',
                 'nombres' => 'required',
