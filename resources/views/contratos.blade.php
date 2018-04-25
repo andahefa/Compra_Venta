@@ -20,9 +20,6 @@
                           @foreach($datos as $contrato)
                           <tr>
                           <td style="display:none">{{$contrato['idContrato']}}</td>
-                          <td>{{$contrato['numCedula']}}</td>
-                          <td>{{$contrato['nombresCliente']}}</td>
-                          <td>{{$contrato['apellidosCliente']}}</td>
                           <td>{{$contrato['estadoContrato']}}</td>
                           <td>{{$contrato['valorPrestado']}}</td>
                           <td>{{$contrato['fechaPrestamo']}}</td>

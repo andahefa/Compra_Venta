@@ -26,6 +26,7 @@ class ContratosController extends Controller
         $articulos = DB::table('articulo')
                     ->join('categoria_articulo', 'articulo.id_categoria', '=', 'categoria_articulo.id_categoria')
                     ->join('estado_articulo', 'articulo.id_estado_articulo', '=', 'estado_articulo.id_estado_articulo')
+                    ->where('estado_articulo.nombre', '=', 'Sin Contrato')
                     ->select('articulo.id_articulo','categoria_articulo.nombre as categoria', 'estado_articulo.nombre as estado', 'articulo.marca', 'articulo.referencia', 'articulo.descripcion' )
                     ->get();
         $clientes = DB::select('Select * from clientes');
@@ -34,16 +35,13 @@ class ContratosController extends Controller
 
         foreach ($contratos as $contrato) {
 
-            $nombreCliente = DB::select("Select * from clientes where num_cedula = '".$contrato->num_cedula_cliente."'" );
+        
             $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);         
             $datos[$i]["idContrato"] = $contrato->id_contrato;
-            $datos[$i]["numCedula"] = $contrato->num_cedula_cliente;
             $datos[$i]["estadoContrato"] = $estadoContrato[0]->nombre;
             $datos[$i]["valorPrestado"] = $contrato->valor_prestado;
             $datos[$i]["fechaPrestamo"] = $contrato->fecha_prestamo;
             $datos[$i]["intereses"] = $contrato->valor_intereses;
-            $datos[$i]["nombresCliente"] = $nombreCliente[0]->nombres;
-            $datos[$i]["apellidosCliente"] = $nombreCliente[0]->apellidos;
 
             $i = $i+1;      
         }

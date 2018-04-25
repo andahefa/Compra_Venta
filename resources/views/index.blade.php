@@ -6,6 +6,7 @@
                               <table id="articulos" class="table table-condensed table-bordered">
                                 <thead>
                                   <tr>
+                                    <th>Nombre Cliente</th>
                                     <th>Cedula Cliente</th>
                                     <th>Categoria</th>
                                     <th>Estado</th>
@@ -19,14 +20,20 @@
                                     @foreach($articulos as $articulo)
                                     <tr>
                                     <td style="display:none">{{$articulo['id']}}</td>
+                                    <td>{{$articulo['nombres_cliente']}} {{$articulo['apellidos_cliente']}}</td>
                                     <td>{{$articulo['id_cliente']}}</td>
                                     <td>{{$articulo['categoria']}}</td>
-                                    <td>{{$articulo['estado']}}</td>
+                                    @if($articulo['estado'] == 'Sin Contrato')
+                                     <td><p style="background: #F90000;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$articulo['estado']}}</p></td>
+                                    @else
+                                    <td><p style="background: #4A96D2;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$articulo['estado']}}</p></td>
+                                    @endif
+                                                                                                        
                                     <td>{{$articulo['marca']}}</td>
                                     <td>{{$articulo['referencia']}}</td>
                                     <td>{{$articulo['descripcion']}}</td>
                                     <td>
-                                        <button type="button" name="editar" id="Editar" onclick="editarArticulo('{{$articulo['id']}}', '{{$articulo['categoria']}}', '{{$articulo['estado']}}', '{{$articulo['marca']}}', '{{$articulo['referencia']}}', '{{$articulo['descripcion']}}')" class="btn btn-primary">
+                                        <button type="button" name="editar" id="Editar" onclick="editarArticulo('{{$articulo['id_cliente']}} - {{$articulo['nombres_cliente']}} {{$articulo['apellidos_cliente']}}','{{$articulo['id']}}', '{{$articulo['categoria']}}', '{{$articulo['estado']}}', '{{$articulo['marca']}}', '{{$articulo['referencia']}}', '{{$articulo['descripcion']}}')" class="btn btn-primary">
                                         <span class="glyphicon glyphicon-edit"></span>
                                         </button>
                                     </td>
@@ -54,6 +61,12 @@
                                         <div class="form-group">
                                           <label style="display: none">Id</label>
                                           <input style="display: none" type="text" class="form-control input-sm" name="id" id="id">
+                                          <label class="form.control">Cliente</label>
+                                          <select id="cliente" name="cliente" class="form-control">
+                                                @foreach($clientes as $cliente)
+                                               <option id="{{$cliente->num_cedula}} - {{$cliente->nombres}} {{$cliente->apellidos}}" value="{{$cliente->num_cedula}} - {{$cliente->nombres}} {{$cliente->apellidos}}">{{$cliente->num_cedula}} - {{$cliente->nombres}} {{$cliente->apellidos}}</option>
+                                                @endforeach
+                                          </select>
                                           <label class="form.control">Categoria</label>
                                           <select id="categoria" name="categoria" class="form-control">
                                                 @foreach($categorias as $categoria)
@@ -112,6 +125,14 @@
                               <div class="modal-body">
                                     <form method="post" action="articulo/store">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <label>Cliente:</label>
+                                        <select class="form-control" id="cliente" name="cliente">
+                                          
+                                          @foreach($clientes as $cliente)
+                                          <option>{{$cliente->num_cedula}} - {{$cliente->nombres}} {{$cliente->apellidos}}</option>
+                                          @endforeach
+                                            
+                                        </select>
                                         <label>Categoria</label>
                                         <select class="form-control" id="categoria" name="categoria">
                                             <option value="0">Seleccione...</option>
@@ -152,9 +173,10 @@
                         <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
                         <script type="text/javascript">
                             
-                            function editarArticulo(id, categoria, estado, marca, referencia, descripcion){
+                            function editarArticulo(cliente, id, categoria, estado, marca, referencia, descripcion){
                                 $('#modalEditarArticulo').modal('show');
                                 $('#id').val(id);
+                                document.getElementById(cliente).selected = "true";
                                 document.getElementById(categoria).selected = "true";
                                 document.getElementById(estado).selected = "true";
                                 $('#marca').val(marca);
@@ -172,6 +194,10 @@
                             @if(Session::has('success'))
                                 toastr.success("{{ Session::get('success') }}");                         
                             @endif
+
+                            function colorEstadoArticulo(){
+
+                            }
 
 
                             

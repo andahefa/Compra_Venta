@@ -10,5 +10,5 @@ class Articulo extends Model
 	public $timestamps = false;
     protected $table = 'articulo';
     protected $primaryKey = 'id_articulo';
-    protected $fillable = ['id_articulo','id_categoria', 'id_estado_articulo','marca','referencia','descripcion'];
+    protected $fillable = ['id_articulo','id_categoria', 'id_estado_articulo','marca','referencia','descripcion', 'id_cliente'];
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Articulo;
 use App\Categoria_Articulo;
 use App\Estado_Articulo;
+use App\Clientes;
 use DB;
 
 class ArticuloController extends Controller
@@ -17,11 +18,17 @@ class ArticuloController extends Controller
      */
     public function index()
     {   
-        $articulos = Articulo::orderBy('id_articulo')->get();
         $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
         $categorias = Categoria_Articulo::orderBy('id_categoria')->get();
         $cateArtic = Categoria_Articulo::orderBy('id_categoria')->get();
         $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
+
+        $articulos = DB::table('articulo')
+                    ->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
+                    ->select('articulo.*', 'clientes.*')
+                    ->get();
+        $clientes = Clientes::orderBy('num_cedula')->get();
+        error_log("Clientessss:".$clientes);
 
         $datos = [];
         $i = 0;
@@ -38,14 +45,17 @@ class ArticuloController extends Controller
             $datos[$i]["marca"] = $articulo->marca;
             $datos[$i]["referencia"] = $articulo->referencia;
             $datos[$i]["descripcion"] = $articulo->descripcion;
-             $datos[$i]["id_cliente"] = $articulo->id_cliente;
+            $datos[$i]["id_cliente"] = $articulo->id_cliente;
+            $datos[$i]["nombres_cliente"] = $articulo->nombres;
+            $datos[$i]["apellidos_cliente"] = $articulo->apellidos;
+
           
            $i= $i+1; 
         }
 
        
         return view('index')
-            ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias, 'tipos' =>$cateArtic, 'estados' => $estados] );
+            ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias, 'tipos' =>$cateArtic, 'estados' => $estados, 'clientes' => $clientes] );
     }
 
     /**
@@ -73,13 +83,15 @@ class ArticuloController extends Controller
     public function store(Request $request)
     {
         //
+        $cedula = explode("-", $request->get('cliente'));
         $articulo = new Articulo([
           'id_articulo' => 0,
           'id_categoria' => $request->get('categoria'),
           'id_estado_articulo' => $request->get('estado'),
           'marca' => $request->get('marca'),
           'referencia' => $request->get('referencia'),
-          'descripcion' => $request->get('descripcion')
+          'descripcion' => $request->get('descripcion'),
+          'id_cliente' => $cedula[0]
         ]);
 
         $articulo->save();
@@ -119,13 +131,14 @@ class ArticuloController extends Controller
         'referencia' => 'required',
         'descripcion' => 'required'
         ]);
-
+            $cedula = explode("-", $request->get('cliente'));
             $articulo = Articulo::find($request->id);
             $articulo->id_categoria = $request->categoria;
             $articulo->id_estado_articulo = $request->estado;
             $articulo->marca = $request->marca;
             $articulo->referencia = $request->referencia;
             $articulo->descripcion = $request->descripcion;
+            $articulo->id_cliente = $cedula[0];
 
             $articulo->save();
 
