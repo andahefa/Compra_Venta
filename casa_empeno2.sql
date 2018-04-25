@@ -3,33 +3,6 @@
 # Generator: MySQL-Front 6.0  (Build 2.20)
 
 
-#
-# Structure for table "articulo"
-#
-
-DROP TABLE IF EXISTS `articulo`;
-CREATE TABLE `articulo` (
-  `id_articulo` int(30) NOT NULL AUTO_INCREMENT,
-  `id_categoria` int(10) NOT NULL,
-  `id_estado_articulo` int(10) NOT NULL,
-  `marca` varchar(50) NOT NULL,
-  `referencia` varchar(100) NOT NULL,
-  `descripcion` varchar(255) NOT NULL,
-  `id_cliente` int(10) DEFAULT NULL,
-  PRIMARY KEY (`id_articulo`),
-  KEY `id_categoria` (`id_categoria`),
-  KEY `id_estado_articulo` (`id_estado_articulo`),
-  KEY `FK_articuloCliente` (`id_cliente`),
-  CONSTRAINT `FK_articuloCliente` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`num_cedula`),
-  CONSTRAINT `articulo_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categoria_articulo` (`id_categoria`),
-  CONSTRAINT `articulo_ibfk_2` FOREIGN KEY (`id_estado_articulo`) REFERENCES `estado_articulo` (`id_estado_articulo`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
-
-#
-# Data for table "articulo"
-#
-
-INSERT INTO `articulo` VALUES (1,1,1,'huawei','p8 lite','Articulo en buen estado.aaa',123456789),(2,1,1,'samsung','s3 mini','descripcion de prueba 2',1020808853),(16,4,1,'Samsung','aaa','prueba',1020808853),(17,1,1,'sdsdaaaa','sdsd','asasa',1020808853),(18,4,1,'LG1','I-776GH','Televisor con golpe en la pantalla actualizado',1020808853),(19,1,1,'samsung','s8 mini','celular en buen estado',1020808853),(20,1,1,'pajarito','pajarito2','de prueba',123456789),(21,4,1,'samsung','s-3456','televisor en buen estado',79205593),(22,1,1,'iphone x','de mentiras','robadosss',123456789),(23,4,2,'LG','lg-11111','deeded',79205593),(24,4,2,'9999999999999999','sfsfsf','sfsfsffs',79205593);
 
 #
 # Structure for table "categoria_articulo"
@@ -68,6 +41,7 @@ CREATE TABLE `clientes` (
 
 INSERT INTO `clientes` VALUES (79205593,'Manuel','Hernandez',3207850643,'prueba'),(123456789,'Jhon','Muñozjjj',3214567654,'direccion de prueba'),(1020808853,'Anderson David','hernan',3125968644,'direccion prueba');
 
+
 #
 # Structure for table "estado_articulo"
 #
@@ -84,6 +58,34 @@ CREATE TABLE `estado_articulo` (
 #
 
 INSERT INTO `estado_articulo` VALUES (1,'En Bodega'),(2,'Sin Contrato');
+
+#
+# Structure for table "articulo"
+#
+
+DROP TABLE IF EXISTS `articulo`;
+CREATE TABLE `articulo` (
+  `id_articulo` int(30) NOT NULL AUTO_INCREMENT,
+  `id_categoria` int(10) NOT NULL,
+  `id_estado_articulo` int(10) NOT NULL,
+  `marca` varchar(50) NOT NULL,
+  `referencia` varchar(100) NOT NULL,
+  `descripcion` varchar(255) NOT NULL,
+  `id_cliente` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id_articulo`),
+  KEY `id_categoria` (`id_categoria`),
+  KEY `id_estado_articulo` (`id_estado_articulo`),
+  KEY `FK_articuloCliente` (`id_cliente`),
+  CONSTRAINT `FK_articuloCliente` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`num_cedula`),
+  CONSTRAINT `articulo_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categoria_articulo` (`id_categoria`),
+  CONSTRAINT `articulo_ibfk_2` FOREIGN KEY (`id_estado_articulo`) REFERENCES `estado_articulo` (`id_estado_articulo`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+
+#
+# Data for table "articulo"
+#
+
+INSERT INTO `articulo` VALUES (1,1,1,'huawei','p8 lite','Articulo en buen estado.aaa',123456789),(2,1,1,'samsung','s3 mini','descripcion de prueba 2',1020808853),(16,4,1,'Samsung','aaa','prueba',1020808853),(17,1,1,'sdsdaaaa','sdsd','asasa',1020808853),(18,4,1,'LG1','I-776GH','Televisor con golpe en la pantalla actualizado',1020808853),(19,1,1,'samsung','s8 mini','celular en buen estado',1020808853),(20,1,1,'pajarito','pajarito2','de prueba',123456789),(21,4,1,'samsung','s-3456','televisor en buen estado',79205593),(22,1,1,'iphone x','de mentiras','robadosss',123456789),(23,4,2,'LG','lg-11111','deeded',79205593),(24,4,2,'9999999999999999','sfsfsf','sfsfsffs',79205593);
 
 #
 # Structure for table "estado_contrato"
