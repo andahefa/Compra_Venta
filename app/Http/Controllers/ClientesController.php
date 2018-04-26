@@ -92,14 +92,6 @@ class ClientesController extends Controller
                 'direccion' => 'required'
             ]);
 
-        /*
-        $validator = Validator::make($request->all(), [
-        'cedula' => 'required',
-        'nombres' => 'required',
-        'apellidos' => 'required',
-        'telefono' => 'required',
-        'direccion' => 'required'
-        ]);*/
 
             $cliente = Clientes::find($request->get('cedula'));
             $cliente->nombres = $request->get('nombres');

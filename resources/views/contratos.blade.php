@@ -126,7 +126,7 @@
 
                           <div class="panel-body">
                              <!-- Table -->
-                          <table class="table" style="width: 100%">
+                          <table class="table" id="articulosSinContrato" style="width: 100%">
                                 <thead>
                               <tr>
                                 <th>Categoria</th>
@@ -139,7 +139,7 @@
                             </thead>
                             <tbody>
                                 @foreach($articulos as $articulo)
-                                <tr>
+                                <tr id="{{$articulo->id_articulo}}:articulosSinContrato">
                                 <td style="display:none">{{$articulo->id_articulo}}</td>
                                 <td>{{$articulo->categoria}}</td>
                                 <td>{{$articulo->estado}}</td>
@@ -270,6 +270,7 @@
 
                               var table = document.getElementById("tablaArticulosAgregados");
                               var row = table.insertRow(table.rows.length);
+                              row.id = datos[0]+":articulosAgregados"
                               var cell1 = row.insertCell(0);
                               var cell2 = row.insertCell(1);
                               var cell3 = row.insertCell(2);
@@ -284,8 +285,11 @@
                               cell4.innerHTML = datos[4];
                               cell5.innerHTML = "<td><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px' align='center'></td>";
                               cell6.innerHTML = "<td><input type='checkbox' name='check1' style='margin: 5px 27px' /></td>"
+                              
+                              $('#'+datos[0]+":articulosSinContrato").remove();
+                              
                              
-                           }
+                              }
                         });
                     }
 
