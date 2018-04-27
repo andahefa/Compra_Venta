@@ -26,10 +26,10 @@ class ContratosController extends Controller
         $articulos = DB::table('articulo')
                     ->join('categoria_articulo', 'articulo.id_categoria', '=', 'categoria_articulo.id_categoria')
                     ->join('estado_articulo', 'articulo.id_estado_articulo', '=', 'estado_articulo.id_estado_articulo')
+                    ->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
                     ->where('estado_articulo.nombre', '=', 'Sin Contrato')
-                    ->select('articulo.id_articulo','categoria_articulo.nombre as categoria', 'estado_articulo.nombre as estado', 'articulo.marca', 'articulo.referencia', 'articulo.descripcion' )
+                    ->select('clientes.*','articulo.id_articulo','categoria_articulo.nombre as categoria', 'estado_articulo.nombre as estado', 'articulo.marca', 'articulo.referencia', 'articulo.descripcion' )
                     ->get();
-        $clientes = DB::select('Select * from clientes');
         $datos = [];
         $i = 0;
 
@@ -45,7 +45,7 @@ class ContratosController extends Controller
 
             $i = $i+1;      
         }
-        return view('contratos') ->with(['datos' =>$datos, 'estados' => $estados, 'clientes' => $clientes, 'articulos' => $articulos]);
+        return view('contratos') ->with(['datos' =>$datos, 'estados' => $estados, 'articulos' => $articulos]);
     }
 
     /**
