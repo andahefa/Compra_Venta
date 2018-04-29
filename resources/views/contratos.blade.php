@@ -25,7 +25,7 @@
                           <td>{{$contrato['fechaPrestamo']}}</td>
                           <td>{{$contrato['intereses']}}</td>
                           <td>
-                              <button type="button" name="editar" id="Editar" onclick="editarContrato('{{$contrato['idContrato']}}', '{{$contrato['numCedula']}}', '{{$contrato['nombresCliente']}}', '{{$contrato['apellidosCliente']}}', '{{$contrato['estadoContrato']}}', '{{$contrato['valorPrestado']}}', '{{$contrato['fechaPrestamo']}}', '{{$contrato['intereses']}}')" class="btn btn-primary">
+                              <button type="button" name="editar" id="Editar" onclick="editarContrato('{{$contrato['idContrato']}}', '{{$contrato['estadoContrato']}}', '{{$contrato['valorPrestado']}}', '{{$contrato['fechaPrestamo']}}', '{{$contrato['intereses']}}')" class="btn btn-primary">
                               <span class="glyphicon glyphicon-edit"></span>
                               </button>
                           </td>
@@ -358,29 +358,51 @@
                       var fechaPrestamo = $('#cFechaPrestamo').val();
                       var valorIntereses = $('#cValorIntereses').val();
 
-                      
-                      $('#tablaArticulosAgregados tr').each(function() {
                       var i = 0;
+                      
+                      /*$('#tablaArticulosAgregados tr').each(function() {
+                    
                       $(this).find("td").each(function(){
                         var idArticulo = $(this).html(); 
                         datos[i] = ([idArticulo,idEstadoContrato,valorPrestado,fechaPrestamo,valorIntereses]);
-                          i++;
+                        //datos[i] = {idArticulo:idArticulo,idEstadoContrato:idEstadoContrato,valorPrestado:valorPrestado,fechaPrestamo:fechaPrestamo,valorIntereses:valorIntereses};
+                        i++;
                           /*esta linea sirve para que solo objenca el id del proudcto asociado y se salga*/
-                          return false; 
+                        /*return false; 
                       });
 
-                          $.ajax({
+
+                    });*/
+
+
+                    $('#tablaArticulosAgregados tr').each(function() {
+                      if(i>0){
+                        var idArticulo = $(this).find("td").eq(0).html();
+                        var cedula = $(this).find("td").eq(2).html();
+                        datos[i-1] = ([idArticulo,cedula,idEstadoContrato,valorPrestado,fechaPrestamo,valorIntereses]);
+                      }
+                      i++;
+                  });
+                       $.ajax({
+                        
                               type:'post',
                               url:"contratos/crear",
-                              data:{
-                                  '_token': '{{csrf_token()}}',
-                                  'arrayDatos': datos
-                                  
+                               headers: {
+                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
                               },
+                              dataType: "JSON",
+                              data:{
+                                  'arrayDatos': datos
+                              },
+                             
                               success: function(result){
-                                   
-                                    alert("Contrato Creado Exitosamente!!");
-                                    location.reload();
+                                    
+                                    if(result == 2){
+                                      alert("Los articulos seleccionados deben pertenecer al mismo cliente");
+                                    }
+                                    else{
+                                      location.reload();  
+                                    }
                                                                                        
                               },
                                error: function(data){                                    
@@ -388,7 +410,6 @@
                               }   
 
                           }); 
-                    });
                     }              
 
               </script>

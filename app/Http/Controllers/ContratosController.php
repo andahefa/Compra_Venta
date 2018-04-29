@@ -7,6 +7,7 @@ use App\Contratos;
 use App\Estado_Contrato;
 use App\Clientes;
 use App\Articulo;
+use App\Articulo_Contrato;
 use Path\To\Your\Log;
 use DB;
 use Illuminate\Support\Facades\Validator;
@@ -42,7 +43,6 @@ class ContratosController extends Controller
             $datos[$i]["valorPrestado"] = $contrato->valor_prestado;
             $datos[$i]["fechaPrestamo"] = $contrato->fecha_prestamo;
             $datos[$i]["intereses"] = $contrato->valor_intereses;
-
             $i = $i+1;      
         }
         return view('contratos') ->with(['datos' =>$datos, 'estados' => $estados, 'articulos' => $articulos]);
@@ -66,9 +66,62 @@ class ContratosController extends Controller
      */
     public function store(Request $request)
     {
-        //
 
-        $cedula = explode("-", $request->get('cliente'));
+        $value = $request->input('arrayDatos');
+        $idArticuloAnterior = 0;
+        $estado = 0;
+        for($i = 0; $i < count($value); $i++ ){
+
+             $idArticulo = $value[$i][0];
+             if($i == 0){
+                $idArticuloAnterior =(int)$idArticulo;
+             }else if($idArticuloAnterior != $idArticulo ){
+                 $estado = 2;
+             }
+        }
+
+        if($estado != 2){
+
+            for($i = 0; $i < count($value); $i++ ){
+
+                 $idArticulo = $value[$i][0];
+                 $cedula = $value[$i][1];
+                 $idEstadoContrato = $value[$i][2];
+                 $valorPrestado = $value[$i][3];
+                 $fechaPrestamo = $value[$i][4];
+                 $valorIntereses = $value[$i][5];
+                 
+                $contrato = new Contratos([
+                  'id_contrato' => 0,
+                  'num_cedula_cliente' => $cedula,
+                  'id_estado_contrato' => $idEstadoContrato,
+                  'valor_prestado' => $valorPrestado,
+                  'fecha_prestamo' => $fechaPrestamo,
+                  'valor_intereses' => $valorIntereses
+                ]);
+
+
+                $idContratoInsert =  DB::select('select LAST_INSERT_ID() as id');
+                error_log("otroooo:".$idContratoInsert->id);
+                foreach ($idContratoInsert as $id) {
+                    error_log("idddddddddd:".$id);
+                    /*$articuloContrato = new Articulo_Contrato([
+                      'id_articulo' => $id->id,
+                      'id_contrato' => 0
+                    ]);*/
+                }
+                
+
+                $contrato->save();
+                session()->flash('success','Contrato Creado Correctamente');
+                return redirect()->route('contratos.index');
+            }
+        }else{
+            return $estado;
+        }
+    }
+
+       /* $cedula = explode("-", $request->get('cliente'));
         $contrato = new Contratos([
           'id_contrato' => 0,
           'num_cedula_cliente' => $cedula[0],
@@ -80,9 +133,7 @@ class ContratosController extends Controller
         ]);
 
         
-        $contrato->save();
-        session()->flash('success','Contrato Creado Correctamente');
-        return redirect()->route('contratos.index');
+        
 
 
 
