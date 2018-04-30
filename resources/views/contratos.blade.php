@@ -376,13 +376,15 @@
 
 
                     $('#tablaArticulosAgregados tr').each(function() {
-                      if(i>0){
-                        var idArticulo = $(this).find("td").eq(0).html();
-                        var cedula = $(this).find("td").eq(2).html();
-                        datos[i-1] = ([idArticulo,cedula,idEstadoContrato,valorPrestado,fechaPrestamo,valorIntereses]);
-                      }
-                      i++;
-                  });
+
+                        if(i>0){
+                          var idArticulo = $(this).find("td").eq(0).html();
+                          var cedula = $(this).find("td").eq(2).html();
+                          datos[i-1] = ([idArticulo,cedula,idEstadoContrato,valorPrestado,fechaPrestamo,valorIntereses]);
+                        }
+                        i++;
+                     });
+
                        $.ajax({
                         
                               type:'post',
@@ -400,13 +402,12 @@
                                     if(result == 2){
                                       alert("Los articulos seleccionados deben pertenecer al mismo cliente");
                                     }
-                                    else{
+                                    else if(result.status == '200'){
+                                      alert("Contrato Creado Exitosamente");
                                       location.reload();  
-                                    }
-                                                                                       
+                                    }                                              
                               },
-                               error: function(data){                                    
-
+                               error: function(data){
                               }   
 
                           }); 

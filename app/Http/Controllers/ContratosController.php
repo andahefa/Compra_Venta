@@ -68,14 +68,14 @@ class ContratosController extends Controller
     {
 
         $value = $request->input('arrayDatos');
-        $idArticuloAnterior = 0;
+        $cedulaAnterior = 0;
         $estado = 0;
         for($i = 0; $i < count($value); $i++ ){
 
-             $idArticulo = $value[$i][0];
+             $cedulaCliente = $value[$i][1];
              if($i == 0){
-                $idArticuloAnterior =(int)$idArticulo;
-             }else if($idArticuloAnterior != $idArticulo ){
+                $cedulaAnterior =(int)$cedulaCliente;
+             }else if($cedulaAnterior != $cedulaCliente ){
                  $estado = 2;
              }
         }
@@ -90,53 +90,38 @@ class ContratosController extends Controller
                  $valorPrestado = $value[$i][3];
                  $fechaPrestamo = $value[$i][4];
                  $valorIntereses = $value[$i][5];
-                 
-                $contrato = new Contratos([
-                  'id_contrato' => 0,
-                  'num_cedula_cliente' => $cedula,
-                  'id_estado_contrato' => $idEstadoContrato,
-                  'valor_prestado' => $valorPrestado,
-                  'fecha_prestamo' => $fechaPrestamo,
-                  'valor_intereses' => $valorIntereses
-                ]);
+  
+                 $idContratoCreado;
 
+                if($i==0){
 
-                $idContratoInsert =  DB::select('select LAST_INSERT_ID() as id');
-                error_log("otroooo:".$idContratoInsert->id);
-                foreach ($idContratoInsert as $id) {
-                    error_log("idddddddddd:".$id);
-                    /*$articuloContrato = new Articulo_Contrato([
-                      'id_articulo' => $id->id,
-                      'id_contrato' => 0
-                    ]);*/
+                    $idContratoCreado = DB::table('contratos')->insertGetId(
+                        array('id_contrato' => 0,
+                        'id_estado_contrato' => $idEstadoContrato,
+                        'valor_prestado' => $valorPrestado,
+                        'fecha_prestamo' => $fechaPrestamo,
+                        'valor_intereses' => $valorIntereses)
+                    );
                 }
-                
 
-                $contrato->save();
-                session()->flash('success','Contrato Creado Correctamente');
-                return redirect()->route('contratos.index');
+                $articuloContrato = new Articulo_Contrato([
+                    'id_articulo' => $idArticulo,
+                    'id_contrato' => $idContratoCreado
+                ]);
+                
+                $articuloContrato->save();
             }
+             
         }else{
             return $estado;
         }
+
+        $request->session()->flash('message', 'New customer added successfully.');
+        $request->session()->flash('message-type', 'success');
+
+        return response()->json(['status'=>'200']);
     }
-
-       /* $cedula = explode("-", $request->get('cliente'));
-        $contrato = new Contratos([
-          'id_contrato' => 0,
-          'num_cedula_cliente' => $cedula[0],
-          'id_estado_contrato' => $request->get('estado'),
-          'valor_prestado' => $request->get('valorPrestado'),
-          'fecha_prestamo' => $request->get('fechaPrestamo'),
-          'valor_intereses' => $request->get('valorIntereses')
-          
-        ]);
-
         
-        
-
-
-
     }
 
     /**
