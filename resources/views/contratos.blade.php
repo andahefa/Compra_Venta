@@ -10,17 +10,23 @@
                           <th>Nombres Cliente</th>
                           <th>Apellidos Cliente</th>
                           <th>Estado Contrato</th>
+                          <th>Articulos Asociados</th>
                           <th>Valor Prestado</th>
                           <th>Fecha Prestamo</th>
                           <th>Valor Intereses</th>
                           <th>Editar</th>
+                          <th>Ver Detalle</th>
                         </tr>
                       </thead>
                       <tbody>
                           @foreach($datos as $contrato)
                           <tr>
                           <td style="display:none">{{$contrato['idContrato']}}</td>
+                          <td>{{$contrato['cedulaCliente']}}</td>
+                          <td>{{$contrato['nombres']}}</td>
+                          <td>{{$contrato['apellidos']}}</td>
                           <td>{{$contrato['estadoContrato']}}</td>
+                          <td><p style="background: #4A96D2;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$contrato['nombreCategoriaArticulo']}} - {{$contrato['marcaArticulo']}}</p></td>
                           <td>{{$contrato['valorPrestado']}}</td>
                           <td>{{$contrato['fechaPrestamo']}}</td>
                           <td>{{$contrato['intereses']}}</td>
@@ -28,6 +34,9 @@
                               <button type="button" name="editar" id="Editar" onclick="editarContrato('{{$contrato['idContrato']}}', '{{$contrato['estadoContrato']}}', '{{$contrato['valorPrestado']}}', '{{$contrato['fechaPrestamo']}}', '{{$contrato['intereses']}}')" class="btn btn-primary">
                               <span class="glyphicon glyphicon-edit"></span>
                               </button>
+                          </td>
+                          <td>
+                            <div style="text-align: center"><input type="button" name="verDetalle" class="btn btn-warning" value="Ver Detalle"></div>
                           </td>
                           </tr>
                           @endforeach

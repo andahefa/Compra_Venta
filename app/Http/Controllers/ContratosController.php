@@ -34,7 +34,26 @@ class ContratosController extends Controller
         $datos = [];
         $i = 0;
 
+
+
         foreach ($contratos as $contrato) {
+
+             $cedula = DB::table('articulo_contrato')
+                    ->join('articulo', 'articulo_contrato.id_articulo', '=', 'articulo.id_articulo')
+                    ->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
+                    ->join('categoria_articulo', 'articulo.id_categoria', '=', 'categoria_articulo.id_categoria')
+                    ->where('articulo_contrato.id_contrato', '=', $contrato->id_contrato)
+                    ->select('clientes.*','articulo.*', 'categoria_articulo.nombre as nombre_categoria')
+                    ->get();
+
+                    foreach ($cedula as $c) {
+                        $datos[$i]["cedulaCliente"] = $c->num_cedula;
+                        $datos[$i]["nombres"] = $c->nombres;
+                        $datos[$i]["apellidos"] = $c->apellidos;
+                        $datos[$i]["nombreCategoriaArticulo"] = $c->nombre_categoria;
+                        $datos[$i]["marcaArticulo"] = $c->marca;
+                    }
+
 
         
             $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);         
@@ -122,7 +141,7 @@ class ContratosController extends Controller
         return response()->json(['status'=>'200']);
     }
         
-    }
+    
 
     /**
      * Display the specified resource.
