@@ -36,7 +36,9 @@
                               </button>
                           </td>
                           <td>
-                            <div style="text-align: center"><input type="button" name="verDetalle" class="btn btn-warning" value="Ver Detalle"></div>
+                           <div type="button" name="editar" id="Editar" class="btn btn-warning">
+                              <span class="glyphicon glyphicon-edit"></span>
+                           </div>
                           </td>
                           </tr>
                           @endforeach
