@@ -6,27 +6,31 @@
                     <table id="articulos" class="table table-condensed table-bordered">
                       <thead>
                         <tr>
-                          <th>Cedula Cliente</th>
-                          <th>Nombres Cliente</th>
-                          <th>Apellidos Cliente</th>
-                          <th>Estado Contrato</th>
-                          <th>Articulos Asociados</th>
-                          <th>Valor Prestado</th>
-                          <th>Fecha Prestamo</th>
-                          <th>Valor Intereses</th>
-                          <th>Editar</th>
-                          <th>Ver Detalle</th>
+                          <th class="text-center">Cedula Cliente</th>
+                          <th class="text-center">Nombres Cliente</th>
+                          <th class="text-center">Apellidos Cliente</th>
+                          <th class="text-center">Estado Contrato</th>
+                          <th class="text-center">Articulos Asociados</th>
+                          <th class="text-center">Valor Prestado</th>
+                          <th class="text-center">Fecha Prestamo</th>
+                          <th class="text-center">Valor Intereses</th>
+                          <th class="text-center">Editar</th>
+                          <th class="text-center">Ver Detalle</th>
                         </tr>
                       </thead>
                       <tbody>
                           @foreach($datos as $contrato)
-                          <tr>
+                          <tr align="center">
                           <td style="display:none">{{$contrato['idContrato']}}</td>
                           <td>{{$contrato['cedulaCliente']}}</td>
                           <td>{{$contrato['nombres']}}</td>
                           <td>{{$contrato['apellidos']}}</td>
                           <td>{{$contrato['estadoContrato']}}</td>
-                          <td><p style="background: #4A96D2;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$contrato['nombreCategoriaArticulo']}} - {{$contrato['marcaArticulo']}}</p></td>
+                          <td> 
+                            @foreach(explode(',', $contrato['articulo']) as $articulo) 
+                                <p style="background: #A4A4A4;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$articulo}}</p>
+                            @endforeach
+                          </td>
                           <td>{{$contrato['valorPrestado']}}</td>
                           <td>{{$contrato['fechaPrestamo']}}</td>
                           <td>{{$contrato['intereses']}}</td>
@@ -37,7 +41,7 @@
                           </td>
                           <td>
                            <div type="button" name="editar" id="Editar" class="btn btn-warning">
-                              <span class="glyphicon glyphicon-edit"></span>
+                              <span class="glyphicon glyphicon-zoom-in"></span>
                            </div>
                           </td>
                           </tr>

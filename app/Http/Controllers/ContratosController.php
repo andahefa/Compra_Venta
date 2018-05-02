@@ -34,8 +34,6 @@ class ContratosController extends Controller
         $datos = [];
         $i = 0;
 
-
-
         foreach ($contratos as $contrato) {
 
              $cedula = DB::table('articulo_contrato')
@@ -46,23 +44,50 @@ class ContratosController extends Controller
                     ->select('clientes.*','articulo.*', 'categoria_articulo.nombre as nombre_categoria')
                     ->get();
 
-                    foreach ($cedula as $c) {
-                        $datos[$i]["cedulaCliente"] = $c->num_cedula;
-                        $datos[$i]["nombres"] = $c->nombres;
-                        $datos[$i]["apellidos"] = $c->apellidos;
-                        $datos[$i]["nombreCategoriaArticulo"] = $c->nombre_categoria;
-                        $datos[$i]["marcaArticulo"] = $c->marca;
+                    $j = 1;
+
+                    if(count($cedula)>1){
+
+                    error_log("Entre a varios articulo");
+
+                        $articulosAsociados = "";
+                        foreach ($cedula as $c) {
+                            if($j == 1){
+                            
+                                $datos[$i]["cedulaCliente"] = $c->num_cedula;
+                                $datos[$i]["nombres"] = $c->nombres;
+                                $datos[$i]["apellidos"] = $c->apellidos;
+                                $articulosAsociados = $articulosAsociados.$c->nombre_categoria." - ".$c->marca;
+                                $j++;
+                            }
+                            else {
+                                $articulosAsociados = $articulosAsociados.",".$c->nombre_categoria." - ".$c->marca;
+                                $datos[$i]["articulo"] = $articulosAsociados;
+                                $j++;
+                            }
+                        }
+
+                        $j++;
+                    }
+                    else{
+                        error_log("Entre a solo 1 articulo");
+                         foreach ($cedula as $c) {
+                            
+                            $datos[$i]["cedulaCliente"] = $c->num_cedula;
+                            $datos[$i]["nombres"] = $c->nombres;
+                            $datos[$i]["apellidos"] = $c->apellidos;
+                            $datos[$i]["articulo"] = $c->nombre_categoria." - ".$c->marca;
+                        }
                     }
 
 
-        
             $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);         
             $datos[$i]["idContrato"] = $contrato->id_contrato;
             $datos[$i]["estadoContrato"] = $estadoContrato[0]->nombre;
             $datos[$i]["valorPrestado"] = $contrato->valor_prestado;
             $datos[$i]["fechaPrestamo"] = $contrato->fecha_prestamo;
             $datos[$i]["intereses"] = $contrato->valor_intereses;
-            $i = $i+1;      
+            $i++;
         }
         return view('contratos') ->with(['datos' =>$datos, 'estados' => $estados, 'articulos' => $articulos]);
     }
