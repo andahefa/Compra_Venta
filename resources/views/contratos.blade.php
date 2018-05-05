@@ -70,12 +70,10 @@
                         <div>
                         <div class="panel panel-default">
                           <!-- Default panel contents -->
-                          <div class="panel-heading" align="center"><b>Articulos</b></div>
+                          <div class="panel-heading" align="center"><b>Articulos Sin Asociar</b></div>
                           <div class="col-sm-12 col-xs-12">
                             <!--<button id="adicionarArticulos" class="btn btn-success add-more" onclick="adicionarArticulos()" style="margin: 20px 0px 0px 590px; padding: 4px 6px"><span class="glyphicon glyphicon-plus"> Adicionar</span></button>-->
                             <input type="button" name="cAdicionar" class="btn btn-success" value="Adicionar" style="margin: 10px 0px 0px 590px; padding: 4px 10px;" onclick="adicionarArticulos()">
-                            <input type="button" name="cBtnBuscar" id="cBtnBuscar" value="Buscar" class="btn" style="margin: -50px 0px 0px 490px; padding: 4px 10px">
-                            <input type="text" class="form-control" style="width: 50%; margin: -50px 0px 0px 144px; padding: 4px 10px;height: 31px" name="cTxtBuscar" id="cTxtBuscar" placeholder="Search">
                           </div>
 
                           <div class="panel-body">
@@ -92,6 +90,7 @@
                               </tr>
                             </thead>
                             <tbody>
+                              <!--
                                 @foreach($articulos as $articulo)
                                 <tr id="{{$articulo->id_articulo}}-articulosSinContrato">
                                 <td style="display:none">{{$articulo->id_articulo}}</td>
@@ -103,6 +102,7 @@
                                 <td><div style="text-align: center"><input type="checkbox" class="" name="chk_{{$articulo->id_articulo}}" value="{{$articulo->id_articulo}},{{$articulo->nombres}} {{$articulo->apellidos}},{{$articulo->num_cedula}},{{$articulo->categoria}},{{$articulo->estado}}, {{$articulo->marca}}, {{$articulo->referencia}}, {{$articulo->descripcion}}" style="margin: 5px 27px;"/></div></td>
                                 </tr>
                                 @endforeach
+                              -->
                             </tbody>
                           </table>
                           </div>
@@ -158,7 +158,7 @@
                     
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="recargarPagina()">Close</button>
                       <button class="btn btn-success" onclick="guardarContrato()" value="Guardar">Guardar</button>
                     </div>
                       
@@ -215,21 +215,64 @@
                     else
                       return false;
                     }
-
-                    /*funcion que me permite cargar el modal de editar y adicional
-                    carga los valores a los respectivos campos del modal*/
-
-                    /*Funcion que permite cargar el modal de crear contrato*/
+                function recargarPagina(){
+                  location.reload();
+                }
+                    /*funcion que me permite cargar el modal de crear y editar un contro. Adicional
+                    carga los valores a los respectivos campos del modal dependiendo si es editar
+                    o crear */
                    function cargarModal(accion){
 
                     switch(accion){
                       case 1:
                         $('#crearYEditarContrato').modal('show');
                         $('.modal-title').text('Nuevo Contrato');
+                       
+                       //Se recibe el objeto $articulos enviado desde el controlador 
+                       var articulos = '<?php echo $articulos?>';
+
+
+                       var JSONObject = JSON.parse(articulos);
+                       var idArticulo, cedula, nombres, apellidos, categoria, estado, marca, referencia, descripcion ;
+                       
+                       //key, es la posicion del objeto
+                        for (var key in JSONObject) {
+
+                          /*Se declaran la variables donde van a quedar almacenados los valores del objeto en esa
+                          iteracion*/
+
+                          idArticulo = JSONObject[key]["id_articulo"];
+                          cedula = JSONObject[key]["num_cedula"];
+                          nombres = JSONObject[key]["nombres"];
+                          apellidos = JSONObject[key]["apellidos"];
+                          categoria = JSONObject[key]["categoria"];
+                          estado = JSONObject[key]["estado"];
+                          marca = JSONObject[key]["marca"];
+                          referencia = JSONObject[key]["referencia"];
+                          descripcion = JSONObject[key]["descripcion"];
+
+                          //Se crea la fila con sus respectivas columas y se agrega a la tabla
+                          $row = $("<tr id="+idArticulo+"-articulosSinContrato></tr>");
+                          $row.append("<td style='display:none'>"+idArticulo+"</td>");
+                          $row.append("<td style='text-align: center'>"+ nombres + " " +apellidos+"</td>");
+                          $row.append("<td style='text-align: center'>"+ cedula +"</td>");
+                          $row.append("<td style='text-align: center'>"+ categoria +"</td>");
+                          $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ estado + "</p></div></td>");
+
+                          /*Se pinta el boton de ver detalle en la tabla*/
+                          $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + idArticulo + "','" + nombres + " " + apellidos + "','" + cedula + "','"+ categoria + "','" + estado + "','" + marca + "','" + referencia + "','" + descripcion + "')\"></div></td>");
+                          /*Se pinta el checkbox de cada fila*/
+                          $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ idArticulo + "' value=\"" + idArticulo + "," + nombres + " " + apellidos + "," + cedula + "," + categoria + "," + estado + "," + marca + "," + referencia + "," + descripcion +"\" style='margin: 5px 27px;'/></div></td>");
+                          $('#tablaArticulosSinContrato').append($row);
+                        }
+                                
                         break;
+
                       case 2:
+
                         $('#crearYEditarContrato').modal('show');
                         $('.modal-title').text('Editar Contrato');
+
                         break;
                       }
                   
@@ -298,6 +341,8 @@
                     /*Funcion que permita cargar el detalle del articulo en el modal*/
                     function detalleArticulo(idArticulo, nombres, cedula, categoria, estado, marca, referencia, descripcion){
                       $('#detalleArticulo').modal('show');
+
+                      console.log("Nombres:"+nombres);
                       $('#nombresCliente').val(nombres);
                       $('#cedulaCliente').val(cedula);
                       $('#categoria').val(categoria);
