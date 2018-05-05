@@ -2,7 +2,7 @@
   @section('content')
 
    <h2><center><b>Contratos</b></center></h2>
-                   <button id="nuevoArticulo" class="btn btn-success add-more" onclick="crearContrato()"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
+                   <button id="nuevoArticulo" class="btn btn-success add-more" onclick="cargarModal(1)"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
                     <table id="articulos" class="table table-condensed table-bordered">
                       <thead>
                         <tr>
@@ -35,12 +35,12 @@
                           <td>{{$contrato['fechaPrestamo']}}</td>
                           <td>{{$contrato['intereses']}}</td>
                           <td>
-                              <button type="button" name="editar" id="Editar" onclick="editarContrato('{{$contrato['idContrato']}}', '{{$contrato['estadoContrato']}}', '{{$contrato['valorPrestado']}}', '{{$contrato['fechaPrestamo']}}', '{{$contrato['intereses']}}')" class="btn btn-primary">
+                              <button type="button" name="editar" id="Editar" onclick="cargarModal(2)" class="btn btn-primary">
                               <span class="glyphicon glyphicon-edit"></span>
                               </button>
                           </td>
                           <td>
-                           <div type="button" name="editar" id="Editar" class="btn btn-warning">
+                           <div type="button" name="verDetalle" id="verDetalle" class="btn btn-warning">
                               <span class="glyphicon glyphicon-zoom-in"></span>
                            </div>
                           </td>
@@ -52,62 +52,17 @@
                   </div>
 
 
-                   <!-- Modal editar Contrato-->
+                 
+              <!-- Modal Crear y Editar Contrato-->
 
-              <div id="editarContrato" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-
-                  <!-- Modal content-->
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title" align="center">Editar Contrato</h4>
-                    </div>
-                  
-                      <div class="modal-body">
-                        <input type="text" name="idContrato" id="idContrato" style="display: none">
-                        <!--<label class="form.control">Cliente:</label>
-                        <select class="form-control" id="cliente" name="cliente" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
-                           unselectable="on"
-                           onselectstart="return false;" 
-                           onmousedown="return false;">>
-
-                        </select>-->
-                        <label class="form.control">Estado Contrato:</label>
-                        <select class="form-control" id="estado" name="estado">
-                          @foreach($estados as $estado)
-                        	<option value="{{$estado->id_estado}}" id="{{$estado->nombre}}">{{$estado->nombre}}</option>
-                          @endforeach
-                        </select>
-                        <label class="form.control">Valor Prestado:</label>
-                        <input type="number" name="valorPrestado" id="valorPrestado" class="form-control">
-                        <label class="form.control">Fecha Prestamo:</label>
-                        <input type="date" name="fechaPrestamo" id="fechaPrestamo" class="form-control">
-                        <label class="form.control">Valor Intereses</label>
-                        <input type="number" name="valorIntereses" id="valorIntereses" class="form-control" style="width: 50%; margin: 0px; color: #787878;" readonly="">
-                        <input type="button" class="btn btn-warning" value="Calcular" style="margin: -56px 0px 0px 295px; padding: 4px 8px;" onclick="calcularIntereses(valorPrestado.value, valorIntereses.id )"></input>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button class="btn btn-success">Guardar</button>
-                      </div>
-                    </form>
-                   
-                  </div>
-
-                </div>
-              </div>
-
-              <!-- Modal Crear Contrato-->
-
-              <div id="crearContrato" class="modal fade" role="dialog">
+              <div id="crearYEditarContrato" class="modal fade" role="dialog">
                 <div class="modal-dialog modal-lg" style="width: 750px; margin: auto;">
 
                   <!-- Modal content-->
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title" align="center">Nuevo Contrato</h4>
+                      <h4 class="modal-title" align="center"></h4>
                     </div>
                     <div class="modal-body">
                         <input type="text" name="cidContrato" id="cidContrato" style="display: none">
@@ -263,27 +218,28 @@
 
                     /*funcion que me permite cargar el modal de editar y adicional
                     carga los valores a los respectivos campos del modal*/
-                   function editarContrato(idContrato, cedula, nombres, apellidos, estadoContrato, valorPrestado, fechaPrestamo, valorIntereses){
-                        $('#editarContrato').modal('show');
-                        $('#idContrato').val(idContrato);
-                        $('#cliente').val(cedula + " - " + nombres + " " + apellidos);
-                        document.getElementById(estadoContrato).selected = "true";
-                        $('#valorPrestado').val(valorPrestado);
-                        $('#fechaPrestamo').val(fechaPrestamo);
-                        $('#valorIntereses').val(valorIntereses);
-                    }
 
                     /*Funcion que permite cargar el modal de crear contrato*/
-                   function crearContrato(){
-                      $('#crearContrato').modal('show');
+                   function cargarModal(accion){
+
+                    switch(accion){
+                      case 1:
+                        $('#crearYEditarContrato').modal('show');
+                        $('.modal-title').text('Nuevo Contrato');
+                        break;
+                      case 2:
+                        $('#crearYEditarContrato').modal('show');
+                        $('.modal-title').text('Editar Contrato');
+                        break;
+                      }
+                  
                    }
 
                      /*Este if me permite validar los mensajes exitosos de las transacciones
                      tales como actualizaciones, creaciones, eliminaciones de contratos exitosamente*/
-                              @if(Session::has('success'))
-                                          toastr.success("{{ Session::get('success') }}");
-                                   
-                                @endif
+                      @if(Session::has('success'))
+                          toastr.success("{{ Session::get('success') }}");
+                      @endif
 
                     /*Funcion que se encarga de calcular los intereses
                     del contrato*/

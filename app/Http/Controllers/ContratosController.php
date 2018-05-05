@@ -177,6 +177,8 @@ class ContratosController extends Controller
     public function show($id)
     {
         //
+
+        dd("Entre a showww");
     }
 
     /**
