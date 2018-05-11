@@ -2277,7 +2277,7 @@ text-align: center;
 }
 
 .form-group{
-	width: 60%;
+	width: 100%;
 	margin: 0px auto;
 }
 
@@ -2327,7 +2327,7 @@ text-align: center;
 .input-group-btn > .btn:active {
   z-index: 0;
 }
-.has-feedback label~.form-control-feedback {
+.has-feedback label~-feedback {
   top: 20px;
 }
 /* FORM VALIDATION STATES */
@@ -2528,13 +2528,15 @@ label.valid {
   border-width: 5px;
 }
 .modal-header {
-  padding: 10px 10px 10px 15px;
-  line-height: 30px;
-  -moz-border-radius: 5px 5px 0px 0px;
-  -webkit-border-radius: 5px 5px 0px 0px;
-  border-radius: 5px 5px 0px 0px;
-  background: #F5F5F5;
-  border-color: #d5d5d5;
+  padding:9px 15px;
+    border-bottom:1px solid #eee;
+    background-color: #819FF7;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+     border-top-left-radius: 5px;
+     border-top-right-radius: 5px;
 }
 .modal-header .close {
   margin-top: 5px;

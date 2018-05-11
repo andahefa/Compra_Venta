@@ -27,8 +27,13 @@
                           <td>{{$contrato['apellidos']}}</td>
                           <td>{{$contrato['estadoContrato']}}</td>
                           <td> 
+                            <!--recorre los articulos que tiene asociados el contrato-->
                             @foreach(explode(',', $contrato['articulo']) as $articulo) 
-                                <p style="background: #A4A4A4;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$articulo}}</p>
+                            <!--recorre los atributos del contrato y busca las categorias de los 
+                              articulos que estan asociados al contrato-->
+                                <?php $a = explode('-', $articulo); ?> 
+                                <p style="background: #A4A4A4;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$a[6]}}</p>
+                            
                             @endforeach
                           </td>
                           <td>{{$contrato['valorPrestado']}}</td>
@@ -40,7 +45,7 @@
                               </button>
                           </td>
                           <td>
-                           <div type="button" name="verDetalle" id="verDetalle" class="btn btn-warning">
+                           <div type="button" name="verDetalle" id="verDetalle" class="btn btn-warning" style="padding: 2px 10px">
                               <span class="glyphicon glyphicon-zoom-in"></span>
                            </div>
                           </td>
@@ -62,13 +67,13 @@
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title" align="center"></h4>
+                      <h4 class="modal-title" align="center" id="tituloModalCrearYEditar"></h4>
                     </div>
                     <div class="modal-body">
                         <input type="text" name="cidContrato" id="cidContrato" style="display: none">
                            
                         <div>
-                        <div class="panel panel-default">
+                        <div class="panel panel-primary" style="">
                           <!-- Default panel contents -->
                           <div class="panel-heading" align="center"><b>Articulos Sin Asociar</b></div>
                           <div class="col-sm-12 col-xs-12">
@@ -89,20 +94,8 @@
                                 <th class="text-center">Seleccionar</th>
                               </tr>
                             </thead>
-                            <tbody>
-                              <!--
-                                @foreach($articulos as $articulo)
-                                <tr id="{{$articulo->id_articulo}}-articulosSinContrato">
-                                <td style="display:none">{{$articulo->id_articulo}}</td>
-                                <td style="text-align: center">{{$articulo->nombres}} {{$articulo->apellidos}}</td>
-                                <td style="text-align: center">{{$articulo->num_cedula}}</td>
-                                <td style="text-align: center">{{$articulo->categoria}}</td>
-                                <td><div style="text-align: center"><p style="background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;">{{$articulo->estado}}</p></div></td>
-                                <td><div style="text-align: center"><input type="button" name="verDetalle" class="btn btn-warning" value="Ver Detalle" style="padding: 1px 5px; font-size: 12px; text-align: center" onclick="detalleArticulo('{{$articulo->id_articulo}}','{{$articulo->nombres}} {{$articulo->apellidos}}', '{{$articulo->num_cedula}}', '{{$articulo->categoria}}', '{{$articulo->estado}}', '{{$articulo->marca}}', '{{$articulo->referencia}}', '{{$articulo->descripcion}}')"></div></td>
-                                <td><div style="text-align: center"><input type="checkbox" class="" name="chk_{{$articulo->id_articulo}}" value="{{$articulo->id_articulo}},{{$articulo->nombres}} {{$articulo->apellidos}},{{$articulo->num_cedula}},{{$articulo->categoria}},{{$articulo->estado}}, {{$articulo->marca}}, {{$articulo->referencia}}, {{$articulo->descripcion}}" style="margin: 5px 27px;"/></div></td>
-                                </tr>
-                                @endforeach
-                              -->
+                            <tbody id="bodyArticulosSinContrato">
+
                             </tbody>
                           </table>
                           </div>
@@ -111,11 +104,11 @@
                         </div>
 
                         <div>
-                        <div class="panel panel-default">
+                        <div class="panel panel-primary">
                           <!-- Default panel contents -->
                           <div class="panel-heading" align="center"><b>Articulos Seleccionados</b></div>
                             <div class="col-sm-12 col-xs-12">
-                            <button id="cEliminarArticulo" name="cEliminarArticulo" class="btn btn-danger add-more" style="margin: 20px 0px 0px 590px; padding: 4px 6px"><span class="glyphicon glyphicon-remove"> Eliminar</span></button>
+                            <button id="cEliminarArticulo" name="cEliminarArticulo" class="btn btn-danger add-more" style="margin: 20px 0px 0px 590px; padding: 4px 10px" onclick="eliminarArticulos()"> Eliminar</button>
                           </div>
                           <div class="panel-body">
                              <!-- Table -->
@@ -130,7 +123,7 @@
                                 <th class="text-center">Seleccionar</th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="bodyArticulosAgregados">
                               
                            
                             </tbody>
@@ -175,7 +168,7 @@
                             <!-- Modal content-->
                             <div class="modal-content">
                               <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <button type="button" class="close" onclick="cerrarModal('#detalleArticulo')">&times;</button>
                                 <h4 class="modal-title" align="center" style="font-size: 16px">Detalle Articulo</h4>
                               </div>
                               <div class="modal-body">
@@ -223,10 +216,13 @@
                     o crear */
                    function cargarModal(accion){
 
+                    $('#bodyArticulosSinContrato').empty();
+                     $('#bodyArticulosAgregados').empty();
+
                     switch(accion){
                       case 1:
                         $('#crearYEditarContrato').modal('show');
-                        $('.modal-title').text('Nuevo Contrato');
+                        $('#tituloModalCrearYEditar').text('Nuevo Contrato');
                        
                        //Se recibe el objeto $articulos enviado desde el controlador 
                        var articulos = '<?php echo $articulos?>';
@@ -258,6 +254,9 @@
                           $row.append("<td style='text-align: center'>"+ cedula +"</td>");
                           $row.append("<td style='text-align: center'>"+ categoria +"</td>");
                           $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ estado + "</p></div></td>");
+                          $row.append("<td style='display:none'>"+ marca +"</td>");
+                          $row.append("<td style='display:none'>"+ referencia +"</td>");
+                          $row.append("<td style='display:none'>"+ descripcion +"</td>");
 
                           /*Se pinta el boton de ver detalle en la tabla*/
                           $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + idArticulo + "','" + nombres + " " + apellidos + "','" + cedula + "','"+ categoria + "','" + estado + "','" + marca + "','" + referencia + "','" + descripcion + "')\"></div></td>");
@@ -271,7 +270,44 @@
                       case 2:
 
                         $('#crearYEditarContrato').modal('show');
-                        $('.modal-title').text('Editar Contrato');
+                        $('#tituloModalCrearYEditar').text('Editar Contrato');
+
+            
+      
+                        var JSONObject = JSON.parse('<?php echo json_encode($datos)?>');
+                        for (var key in JSONObject) {
+                            var nombres = JSONObject[key]["nombres"];
+                            var apellidos = JSONObject[key]["apellidos"];
+                            var cedula = JSONObject[key]["cedulaCliente"];
+                            var articulos = JSONObject[key]["articulo"].split(",");
+                            var atributosArticulo, idArticulo, categoriaArticulo, estado, marca, referencia, descripcion;
+                            for(var i = 0; i < articulos.length; i++){
+
+                                atributosArticulo = articulos[i].split("-");
+                                idArticulo = atributosArticulo[5];
+                                categoriaArticulo = atributosArticulo[6];
+                                estado = atributosArticulo[7];
+                                marca = atributosArticulo[8];
+                                referencia = atributosArticulo[9];
+                                descripcion = atributosArticulo[10];
+
+                                $row = $("<tr id="+idArticulo+"-articulosAgregados></tr>");
+                                $row.append("<td style='display:none'>"+idArticulo+"</td>");
+                                $row.append("<td style='text-align: center'>" + nombres + " " + apellidos + "</td>");
+                                $row.append("<td style='text-align: center'>" + cedula + "</td>");
+                                $row.append("<td style='text-align: center'>"+ categoriaArticulo +"</td>");
+                                $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ estado + "</p></div></td>");
+
+                                /*Se pinta el boton de ver detalle en la tabla*/
+                                $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + idArticulo + "','" + nombres + " " + apellidos + "','" + cedula + "','" + categoriaArticulo + "','" + estado + "','" + marca + "','" + referencia + "','" + descripcion + "')\"></div></td>");
+                                /*Se pinta el checkbox de cada fila*/
+                                $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ idArticulo + "' value=\"" + idArticulo + "," + nombres + " " + apellidos + "," + cedula + "," + categoriaArticulo + "," + estado + "," + marca + "," + referencia + "," + descripcion +"\" style='margin: 5px 27px;'/></div></td>");
+
+                                 /*Se elimina la fila del articulo en la tabla de articulos*/
+                                $('#tablaArticulosAgregados').append($row);
+                            }
+
+                          }
 
                         break;
                       }
@@ -296,46 +332,59 @@
                     /*Funcion que permite adicionar los articulos a la tabla de articulos
                     seleccionados*/
                     function adicionarArticulos(){
-
                         $("input:checkbox:checked").each(function() {
                              //alert($(this).val());
                              var datos = $(this).val().split(",");
                              if(datos[1] != null){
 
-                              var table = document.getElementById("tablaArticulosAgregados");
-                              var row = table.insertRow(table.rows.length);
-                              row.id = datos[0]+":articulosAgregados";
-                              row.style = 'text-align: center';
+                                $row = $("<tr id="+datos[0]+"-articulosAgregados></tr>");
+                                $row.append("<td style='display:none'>"+datos[0]+"</td>");
+                                $row.append("<td style='text-align: center'>" + datos[1] + "</td>");
+                                $row.append("<td style='text-align: center'>" + datos[2] + "</td>");
+                                $row.append("<td style='text-align: center'>"+ datos[3] +"</td>");
+                                $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ datos[4] + "</p></div></td>");
 
-                              var cell1 = row.insertCell(0);
-                              cell1.style = "display:none";
-                              var cell2 = row.insertCell(1);
-                              var cell3 = row.insertCell(2);
-                              var cell4 = row.insertCell(3);
-                              
-                              var cell5 = row.insertCell(4);
-                              var cell6 = row.insertCell(5);
-                              var cell7 = row.insertCell(6);
+                                /*Se pinta el boton de ver detalle en la tabla*/
+                                $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + datos[0] + "','" + datos[1] + "','" + datos[2] + "','" + datos[3] + "','" + datos[4] + "','" + datos[5] + "','" + datos[6] + "','" + datos[7] + "')\"></div></td>");
+                                /*Se pinta el checkbox de cada fila*/
+                                $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ datos[0] + "' value=\"" + datos[0] + "," + datos[1] + "," + datos[2] + "," + datos[3] + "," + datos[4] + "," + datos[5] + "," + datos[6] + "," + datos[7] +"\" style='margin: 5px 27px;'/></div></td>");
 
-                              cell1.innerHTML = datos[0];
-                              cell2.innerHTML = datos[1];
-                              cell3.innerHTML = datos[2];
-                              cell4.innerHTML = datos[3];
-                              cell5.innerHTML = datos[4];
-
-                              /*Se pinta el boton de ver detalle en la tabla
-                              articulos agregados*/
-                              cell6.innerHTML = "<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+datos[0]+",'"+datos[1]+"','"+datos[2]+"','"+datos[3]+"','"+datos[4]+"','"+datos[5]+"','"+datos[6]+"','"+datos[7]+"')\"></div></td>";
-
-                              /*Se pinta el checkbox en la tabla articulos agregados*/
-                              cell7.innerHTML = "<td><input type='checkbox' name='check1' style='margin: 5px 27px' /></td>"
-
-                              /*Se elimina la fila del articulo en la tabla de articulos*/
-                              $('#'+datos[0]+'-articulosSinContrato').remove();
+                                 /*Se elimina la fila del articulo en la tabla de articulos*/
+                                $('#'+datos[0]+'-articulosSinContrato').remove();
+                                $('#tablaArticulosAgregados').append($row);
                               
                              
                               }
                         });
+                    }
+
+                    function eliminarArticulos(){
+
+                          $("input:checkbox:checked").each(function() {
+                             //alert($(this).val());
+                             var datos = $(this).val().split(",");
+                             if(datos[1] != null){
+
+                                $row = $("<tr id="+datos[0]+"-articulosSinContrato></tr>");
+                                $row.append("<td style='display:none'>"+datos[0]+"</td>");
+                                $row.append("<td style='text-align: center'>" + datos[1] + "</td>");
+                                $row.append("<td style='text-align: center'>" + datos[2] + "</td>");
+                                $row.append("<td style='text-align: center'>"+ datos[3] +"</td>");
+                                $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ datos[4] + "</p></div></td>");
+
+                                /*Se pinta el boton de ver detalle en la tabla*/
+                                $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + datos[0] + "','" + datos[1] + "','" + datos[2] + "','" + datos[3] + "','" + datos[4] + "','" + datos[5] + "','" + datos[6] + "','" + datos[7] + "')\"></div></td>");
+                                /*Se pinta el checkbox de cada fila*/
+                                $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ datos[0] + "' value=\"" + datos[0] + "," + datos[1] + "," + datos[2] + "," + datos[3] + "," + datos[4] + "," + datos[5] + "," + datos[6] + "," + datos[7] +"\" style='margin: 5px 27px;'/></div></td>");
+
+                                 /*Se elimina la fila del articulo en la tabla de articulos*/
+                                $('#'+datos[0]+'-articulosAgregados').remove();
+                                $('#tablaArticulosSinContrato').append($row);
+                              
+                    
+                              }
+                        });
+
                     }
 
                     /*Funcion que permita cargar el detalle del articulo en el modal*/

@@ -5,6 +5,8 @@
     <style>
     
     /* estilos vista index*/
+
+    
       #articulos{
         margin: 20px;
         width: 92%;

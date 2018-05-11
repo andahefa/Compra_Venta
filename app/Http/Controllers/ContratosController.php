@@ -46,9 +46,8 @@ class ContratosController extends Controller
 
                     $j = 1;
 
-                    if(count($cedula)>1){
 
-                    error_log("Entre a varios articulo");
+                    if(count($cedula)>1){
 
                         $articulosAsociados = "";
                         foreach ($cedula as $c) {
@@ -57,11 +56,11 @@ class ContratosController extends Controller
                                 $datos[$i]["cedulaCliente"] = $c->num_cedula;
                                 $datos[$i]["nombres"] = $c->nombres;
                                 $datos[$i]["apellidos"] = $c->apellidos;
-                                $articulosAsociados = $articulosAsociados.$c->nombre_categoria." - ".$c->marca;
+                                $articulosAsociados = $articulosAsociados.$c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->marca."-".$c->referencia."-".$c->descripcion;
                                 $j++;
                             }
                             else {
-                                $articulosAsociados = $articulosAsociados.",".$c->nombre_categoria." - ".$c->marca;
+                                $articulosAsociados = $articulosAsociados.",".$c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->marca."-".$c->referencia."-".$c->descripcion;
                                 $datos[$i]["articulo"] = $articulosAsociados;
                                 $j++;
                             }
@@ -72,13 +71,13 @@ class ContratosController extends Controller
                     else{
                         error_log("Entre a solo 1 articulo");
                          foreach ($cedula as $c) {
-                            
                             $datos[$i]["cedulaCliente"] = $c->num_cedula;
                             $datos[$i]["nombres"] = $c->nombres;
                             $datos[$i]["apellidos"] = $c->apellidos;
-                            $datos[$i]["articulo"] = $c->nombre_categoria." - ".$c->marca;
+                            $datos[$i]["articulo"] = $c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->marca."-".$c->referencia."-".$c->descripcion;
                         }
                     }
+
 
 
             $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);         
@@ -87,8 +86,10 @@ class ContratosController extends Controller
             $datos[$i]["valorPrestado"] = $contrato->valor_prestado;
             $datos[$i]["fechaPrestamo"] = $contrato->fecha_prestamo;
             $datos[$i]["intereses"] = $contrato->valor_intereses;
+
             $i++;
         }
+
         return view('contratos') ->with(['datos' =>$datos, 'estados' => $estados, 'articulos' => $articulos]);
     }
 
