@@ -2,7 +2,7 @@
   @section('content')
 
    <h2><center><b>Contratos</b></center></h2>
-                   <button id="nuevoArticulo" class="btn btn-success add-more" onclick="cargarModal(1)"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
+                   <button id="nuevoArticulo" class="btn btn-success add-more" onclick="cargarModal(1, null)"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
                     <table id="articulos" class="table table-condensed table-bordered">
                       <thead>
                         <tr>
@@ -21,11 +21,11 @@
                       <tbody>
                           @foreach($datos as $contrato)
                           <tr align="center">
-                          <td style="display:none">{{$contrato['idContrato']}}</td>
-                          <td>{{$contrato['cedulaCliente']}}</td>
-                          <td>{{$contrato['nombres']}}</td>
-                          <td>{{$contrato['apellidos']}}</td>
-                          <td>{{$contrato['estadoContrato']}}</td>
+                          <td id="idContrato" style="display:none">{{$contrato['idContrato']}}</td>
+                          <td id="cedula">{{$contrato['cedulaCliente']}}</td>
+                          <td id="nombres">{{$contrato['nombres']}}</td>
+                          <td id="apellidos">{{$contrato['apellidos']}}</td>
+                          <td id="estadoContrato">{{$contrato['estadoContrato']}}</td>
                           <td> 
                             <!--recorre los articulos que tiene asociados el contrato-->
                             @foreach(explode(',', $contrato['articulo']) as $articulo) 
@@ -36,16 +36,16 @@
                             
                             @endforeach
                           </td>
-                          <td>{{$contrato['valorPrestado']}}</td>
-                          <td>{{$contrato['fechaPrestamo']}}</td>
-                          <td>{{$contrato['intereses']}}</td>
+                          <td id="valorPrestado">{{$contrato['valorPrestado']}}</td>
+                          <td id="fechaPrestamo">{{$contrato['fechaPrestamo']}}</td>
+                          <td id="intereses">{{$contrato['intereses']}}</td>
                           <td>
-                              <button type="button" name="editar" id="Editar" onclick="cargarModal(2)" class="btn btn-primary">
+                              <button type="button" name="editar" id="Editar" onclick="cargarModal(2,'{{$contrato['idContrato']}}')" class="btn btn-primary">
                               <span class="glyphicon glyphicon-edit"></span>
                               </button>
                           </td>
                           <td>
-                           <div type="button" name="verDetalle" id="verDetalle" class="btn btn-warning" style="padding: 2px 10px">
+                           <div type="button" name="verDetalle" id="verDetalle" class="btn btn-warning" style="padding: 2px 10px" onclick="cargarModal(3,'{{$contrato['idContrato']}}')">
                               <span class="glyphicon glyphicon-zoom-in"></span>
                            </div>
                           </td>
@@ -73,7 +73,7 @@
                         <input type="text" name="cidContrato" id="cidContrato" style="display: none">
                            
                         <div>
-                        <div class="panel panel-primary" style="">
+                        <div class="panel panel-primary" id="panelArticulosSinAsociar">
                           <!-- Default panel contents -->
                           <div class="panel-heading" align="center"><b>Articulos Sin Asociar</b></div>
                           <div class="col-sm-12 col-xs-12">
@@ -104,7 +104,7 @@
                         </div>
 
                         <div>
-                        <div class="panel panel-primary">
+                        <div class="panel panel-primary" id="panelArticulosAsociados">
                           <!-- Default panel contents -->
                           <div class="panel-heading" align="center"><b>Articulos Seleccionados</b></div>
                             <div class="col-sm-12 col-xs-12">
@@ -135,10 +135,10 @@
                           </div>
                        
                         <!--<input type="number" name="cedula" id="cedula" class="form-control">-->
-                        <label class="form.control">Estado Contrato:</label>
+                        <label class="form.control" id="labelEstadoContrato">Estado Contrato:</label>
                         <select class="form-control" id="cEstado" name="cEstado">
                           @foreach($estados as $estado)
-                          <option value="{{$estado->id_estado}}" id="{{$estado->id_estado}}">{{$estado->nombre}}</option>
+                          <option value="{{$estado->id_estado}}" id="{{$estado->nombre}}">{{$estado->nombre}}</option>
                           @endforeach
                         </select>
                         <label class="form.control">Valor Prestado:</label>
@@ -146,13 +146,13 @@
                         <label class="form.control">Fecha Prestamo:</label>
                         <input type="date" name="cFechaPrestamo" id="cFechaPrestamo" class="form-control">
                         <label class="form.control">Valor Intereses</label>
-                        <input type="number" name="cValorIntereses" id="cValorIntereses" class="form-control" style="width: 45%; margin: 0px; color: #787878;" readonly="">
+                        <input type="number" name="cValorIntereses" id="cValorIntereses" class="form-control" style="width: 45%; margin: 0px; color: #555;" readonly="">
                         <input type="button" class="btn btn-info" value="Calcular" id="cCalcular" name="cCalcular" style="margin: -32px 315px 15px; padding: 4px 8px;" onclick="calcularIntereses(cValorPrestado.value,cValorIntereses.id)"></input>
                     
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal" onclick="recargarPagina()">Close</button>
-                      <button class="btn btn-success" onclick="guardarContrato()" value="Guardar">Guardar</button>
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button id="guardarYEditar" class="btn btn-success" onclick="" value="Guardar">Guardar</button>
                     </div>
                       
                   </div>
@@ -214,7 +214,7 @@
                     /*funcion que me permite cargar el modal de crear y editar un contro. Adicional
                     carga los valores a los respectivos campos del modal dependiendo si es editar
                     o crear */
-                   function cargarModal(accion){
+                   function cargarModal(accion, idContrato){
 
                     $('#bodyArticulosSinContrato').empty();
                      $('#bodyArticulosAgregados').empty();
@@ -263,6 +263,8 @@
                           /*Se pinta el checkbox de cada fila*/
                           $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ idArticulo + "' value=\"" + idArticulo + "," + nombres + " " + apellidos + "," + cedula + "," + categoria + "," + estado + "," + marca + "," + referencia + "," + descripcion +"\" style='margin: 5px 27px;'/></div></td>");
                           $('#tablaArticulosSinContrato').append($row);
+
+                          $("#guardarYEditar").attr("onclick","guardarContrato()");
                         }
                                 
                         break;
@@ -271,47 +273,192 @@
 
                         $('#crearYEditarContrato').modal('show');
                         $('#tituloModalCrearYEditar').text('Editar Contrato');
-
-            
+                        document.getElementById($('#estadoContrato').text()).selected = "true";
+                        $('#cValorPrestado').val($('#valorPrestado').text());
+                        $('#cFechaPrestamo').val($('#fechaPrestamo').text());
+                        $('#cValorIntereses').val($('#intereses').text());
       
                         var JSONObject = JSON.parse('<?php echo json_encode($datos)?>');
                         for (var key in JSONObject) {
+                            
+                            var idCont = JSONObject[key]["idContrato"];
                             var nombres = JSONObject[key]["nombres"];
                             var apellidos = JSONObject[key]["apellidos"];
                             var cedula = JSONObject[key]["cedulaCliente"];
                             var articulos = JSONObject[key]["articulo"].split(",");
+
+
                             var atributosArticulo, idArticulo, categoriaArticulo, estado, marca, referencia, descripcion;
-                            for(var i = 0; i < articulos.length; i++){
+                            if(idContrato == idCont){
+                              for(var i = 0; i < articulos.length; i++){
+                                  atributosArticulo = articulos[i].split("-");
+                                  idArticulo = atributosArticulo[5];
+                                  categoriaArticulo = atributosArticulo[6];
+                                  estado = atributosArticulo[7];
+                                  marca = atributosArticulo[8];
+                                  referencia = atributosArticulo[9];
+                                  descripcion = atributosArticulo[10];
 
-                                atributosArticulo = articulos[i].split("-");
-                                idArticulo = atributosArticulo[5];
-                                categoriaArticulo = atributosArticulo[6];
-                                estado = atributosArticulo[7];
-                                marca = atributosArticulo[8];
-                                referencia = atributosArticulo[9];
-                                descripcion = atributosArticulo[10];
+                                  var $row = $("<tr id="+idArticulo+"-articulosAgregados></tr>");
+                                  $row.append("<td style='display:none'>"+idArticulo+"</td>");
+                                  $row.append("<td style='text-align: center'>" + nombres + " " + apellidos + "</td>");
+                                  $row.append("<td style='text-align: center'>" + cedula + "</td>");
+                                  $row.append("<td style='text-align: center'>"+ categoriaArticulo +"</td>");
+                                  $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ estado + "</p></div></td>");
 
-                                $row = $("<tr id="+idArticulo+"-articulosAgregados></tr>");
-                                $row.append("<td style='display:none'>"+idArticulo+"</td>");
-                                $row.append("<td style='text-align: center'>" + nombres + " " + apellidos + "</td>");
-                                $row.append("<td style='text-align: center'>" + cedula + "</td>");
-                                $row.append("<td style='text-align: center'>"+ categoriaArticulo +"</td>");
-                                $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ estado + "</p></div></td>");
+                                  /*Se pinta el boton de ver detalle en la tabla*/
+                                  $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + idArticulo + "','" + nombres + " " + apellidos + "','" + cedula + "','" + categoriaArticulo + "','" + estado + "','" + marca + "','" + referencia + "','" + descripcion + "')\"></div></td>");
+                                  /*Se pinta el checkbox de cada fila*/
+                                  $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ idArticulo + "' value=\"" + idArticulo + "," + nombres + " " + apellidos + "," + cedula + "," + categoriaArticulo + "," + estado + "," + marca + "," + referencia + "," + descripcion +"\" style='margin: 5px 27px;'/></div></td>");
 
-                                /*Se pinta el boton de ver detalle en la tabla*/
-                                $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + idArticulo + "','" + nombres + " " + apellidos + "','" + cedula + "','" + categoriaArticulo + "','" + estado + "','" + marca + "','" + referencia + "','" + descripcion + "')\"></div></td>");
-                                /*Se pinta el checkbox de cada fila*/
-                                $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ idArticulo + "' value=\"" + idArticulo + "," + nombres + " " + apellidos + "," + cedula + "," + categoriaArticulo + "," + estado + "," + marca + "," + referencia + "," + descripcion +"\" style='margin: 5px 27px;'/></div></td>");
+                                   /*Se elimina la fila del articulo en la tabla de articulos*/
+                                  $('#tablaArticulosAgregados').append($row);
+                                  $("#guardarYEditar").attr("onclick","editarContrato("+idContrato+")");
+                              }
 
-                                 /*Se elimina la fila del articulo en la tabla de articulos*/
-                                $('#tablaArticulosAgregados').append($row);
-                            }
+                              break;
+                            
+                          }
+
+                        }
+
+                        /*Se capturan los id's de los articulos que estan en la tabla de articilos
+                        seleccionados para identificarlos y no adicionarlos en la tabla articulos sin
+                        asocias*/
+                        var idArticulos = [];
+                        var i = 0;
+
+                        $('#tablaArticulosAgregados tr').each(function() {
+
+                          if(i>0){
+                            idArticulos.push($(this).find("td").eq(0).html());
 
                           }
 
+                          i++;
+                                    
+                        });
+                       var articulos = '<?php echo $articulos?>';
+                       var JSONObject = JSON.parse(articulos);
+                       var idArticulo, cedula, nombres, apellidos, categoria, estado, marca, referencia, descripcion ;
+                       
+                       //key, es la posicion del objeto
+                        for (var key in JSONObject) {
+
+                          /*Se declaran la variables donde van a quedar almacenados los valores del objeto en esa
+                          iteracion*/
+
+                          idArticulo = JSONObject[key]["id_articulo"];
+                          /*Se busca el articulo en la tabla de articulos adicionados, si no esta
+                          se crea la fila en la tabla de articulos sin asociar */
+                            if(idArticulos.indexOf(idArticulo.toString()) < 0){
+
+                              cedula = JSONObject[key]["num_cedula"];
+                              nombres = JSONObject[key]["nombres"];
+                              apellidos = JSONObject[key]["apellidos"];
+                              categoria = JSONObject[key]["categoria"];
+                              estado = JSONObject[key]["estado"];
+                              marca = JSONObject[key]["marca"];
+                              referencia = JSONObject[key]["referencia"];
+                              descripcion = JSONObject[key]["descripcion"];
+
+                              //Se crea la fila con sus respectivas columas y se agrega a la tabla
+                              $row = $("<tr id="+idArticulo+"-articulosSinContrato></tr>");
+                              $row.append("<td style='display:none'>"+idArticulo+"</td>");
+                              $row.append("<td style='text-align: center'>"+ nombres + " " +apellidos+"</td>");
+                              $row.append("<td style='text-align: center'>"+ cedula +"</td>");
+                              $row.append("<td style='text-align: center'>"+ categoria +"</td>");
+                              $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ estado + "</p></div></td>");
+                              $row.append("<td style='display:none'>"+ marca +"</td>");
+                              $row.append("<td style='display:none'>"+ referencia +"</td>");
+                              $row.append("<td style='display:none'>"+ descripcion +"</td>");
+
+                              /*Se pinta el boton de ver detalle en la tabla*/
+                              $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + idArticulo + "','" + nombres + " " + apellidos + "','" + cedula + "','"+ categoria + "','" + estado + "','" + marca + "','" + referencia + "','" + descripcion + "')\"></div></td>");
+                              /*Se pinta el checkbox de cada fila*/
+                              $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ idArticulo + "' value=\"" + idArticulo + "," + nombres + " " + apellidos + "," + cedula + "," + categoria + "," + estado + "," + marca + "," + referencia + "," + descripcion +"\" style='margin: 5px 27px;'/></div></td>");
+                              $('#tablaArticulosSinContrato').append($row);
+
+                              $("#guardarYEditar").attr("onclick","editarContrato("+idContrato+")");
+
+                             
+                            }
+                      
+                        }
                         break;
+
+                        case 3:
+
+                        $('#crearYEditarContrato').modal('show');
+                        $('#tituloModalCrearYEditar').text('Detalle Contrato');
+                        //document.getElementById($('#estadoContrato').text()).selected = "true";
+                        $('#cValorPrestado').val($('#valorPrestado').text());
+                        $('#cFechaPrestamo').val($('#fechaPrestamo').text());
+                        $('#cValorIntereses').val($('#intereses').text());
+
+                        var JSONObject = JSON.parse('<?php echo json_encode($datos)?>');
+                        for (var key in JSONObject) {
+                            
+                            var idCont = JSONObject[key]["idContrato"];
+                            var nombres = JSONObject[key]["nombres"];
+                            var apellidos = JSONObject[key]["apellidos"];
+                            var cedula = JSONObject[key]["cedulaCliente"];
+                            var articulos = JSONObject[key]["articulo"].split(",");
+
+                            /*Se eliminan los elementos que no son necesarios para el modal de ver detalle
+                            del contrato*/
+
+                            $('#cEliminarArticulo').remove();
+                            $('#panelArticulosSinAsociar').remove();
+                            $('#cEstado').remove();
+                            $("<input id='cEstado' class='form-control' style='color: #555;' readonly></input>").insertAfter("#labelEstadoContrato");
+                            $('#cEstado').val($('#estadoContrato').text());
+                            $('#tablaArticulosAgregados').append($row);
+                            $('#cEstado').attr('readonly', 'true');
+                            $('#cValorPrestado').attr('readonly', 'true');
+                            $('#cValorPrestado').attr('style', 'color: #555');
+                            $('#cFechaPrestamo').attr('readonly', 'true');
+                            $('#cFechaPrestamo').attr('style', 'color: #555');
+                            $('#cCalcular').remove();
+                            $('#guardarYEditar').remove();
+                            
+                            var atributosArticulo, idArticulo, categoriaArticulo, estado, marca, referencia, descripcion;
+                            if(idContrato == idCont){
+                              for(var i = 0; i < articulos.length; i++){
+                                  atributosArticulo = articulos[i].split("-");
+                                  idArticulo = atributosArticulo[5];
+                                  categoriaArticulo = atributosArticulo[6]; 
+                                  console.log("Categoria Articulo:"+categoriaArticulo);
+                                  estado = atributosArticulo[7];
+                                  marca = atributosArticulo[8];
+                                  referencia = atributosArticulo[9];
+                                  descripcion = atributosArticulo[10];
+
+                                  var $row = $("<tr id="+idArticulo+"-articulosAgregados></tr>");
+                                  $row.append("<td style='display:none'>"+idArticulo+"</td>");
+                                  $row.append("<td style='text-align: center'>" + nombres + " " + apellidos + "</td>");
+                                  $row.append("<td style='text-align: center'>" + cedula + "</td>");
+                                  $row.append("<td style='text-align: center'>"+ categoriaArticulo +"</td>");
+                                  $row.append("<td><div style='text-align: center'><p style='background: #F90000;padding: 2px 0px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; font-size: 12px; text-align: center;''>"+ estado + "</p></div></td>");
+
+                                  /*Se pinta el boton de ver detalle en la tabla*/
+                                  $row.append("<td><div style='text-align: center'><input type='button' name='verDetalle' class='btn btn-warning' value='Ver Detalle' style='padding: 1px 5px; font-size: 12px; text-align: center' onclick=\"detalleArticulo("+ "'" + idArticulo + "','" + nombres + " " + apellidos + "','" + cedula + "','" + categoriaArticulo + "','" + estado + "','" + marca + "','" + referencia + "','" + descripcion + "')\"></div></td>");
+                                  /*Se pinta el checkbox de cada fila*/
+                                  $row.append("<td><div style='text-align: center'><input type='checkbox' name='chk_"+ idArticulo + "' value=\"" + idArticulo + "," + nombres + " " + apellidos + "," + cedula + "," + categoriaArticulo + "," + estado + "," + marca + "," + referencia + "," + descripcion +"\" style='margin: 5px 27px;'/></div></td>");
+
+                                  $('#tablaArticulosAgregados').append($row);
+                            
+                              }
+
+                              break;
+                            
+                          }
+
+                        }
+                         break;
+
                       }
-                  
+                    
                    }
 
                      /*Este if me permite validar los mensajes exitosos de las transacciones
@@ -390,8 +537,6 @@
                     /*Funcion que permita cargar el detalle del articulo en el modal*/
                     function detalleArticulo(idArticulo, nombres, cedula, categoria, estado, marca, referencia, descripcion){
                       $('#detalleArticulo').modal('show');
-
-                      console.log("Nombres:"+nombres);
                       $('#nombresCliente').val(nombres);
                       $('#cedulaCliente').val(cedula);
                       $('#categoria').val(categoria);
@@ -478,5 +623,67 @@
                           }); 
                     }              
 
+                    function editarContrato(idContrato){
+                      
+                      var datos = [];
+                      var idEstadoContrato = $('#cEstado').val();
+                      var valorPrestado = $('#cValorPrestado').val();
+                      var fechaPrestamo = $('#cFechaPrestamo').val();
+                      var valorIntereses = $('#cValorIntereses').val();
+
+                      var i = 0;
+                      
+                      /*$('#tablaArticulosAgregados tr').each(function() {
+                    
+                      $(this).find("td").each(function(){
+                        var idArticulo = $(this).html(); 
+                        datos[i] = ([idArticulo,idEstadoContrato,valorPrestado,fechaPrestamo,valorIntereses]);
+                        //datos[i] = {idArticulo:idArticulo,idEstadoContrato:idEstadoContrato,valorPrestado:valorPrestado,fechaPrestamo:fechaPrestamo,valorIntereses:valorIntereses};
+                        i++;
+                          /*esta linea sirve para que solo objenca el id del proudcto asociado y se salga*/
+                        /*return false; 
+                      });
+
+
+                    });*/
+
+
+                    $('#tablaArticulosAgregados tr').each(function() {
+
+                        if(i>0){
+                          var idArticulo = $(this).find("td").eq(0).html();
+                          var cedula = $(this).find("td").eq(2).html();
+                          datos[i-1] = ([idContrato,idArticulo,cedula,idEstadoContrato,valorPrestado,fechaPrestamo,valorIntereses]);
+                        }
+                        i++;
+                     });
+
+                       $.ajax({
+                        
+                              type:'post',
+                              url:"contratos/actualizar",
+                               headers: {
+                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                              },
+                              dataType: "JSON",
+                              data:{
+                                  'arrayDatos': datos
+                              },
+                             
+                              success: function(result){
+                                    
+                                    if(result == 2){
+                                      alert("Los articulos seleccionados deben pertenecer al mismo cliente");
+                                    }
+                                    else if(result.status == '200'){
+                                      alert("Contrato Actualizado Exitosamente");
+                                      location.reload();  
+                                    }                                              
+                              },
+                               error: function(data){
+                              }   
+
+                          }); 
+                    }  
               </script>
   @endsection

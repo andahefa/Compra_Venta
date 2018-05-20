@@ -31,3 +31,7 @@ Route::post('clientes/actualizar', 'ClientesController@edit');
 
 
 //Route::post('/producto/store', ['uses' => 'ProductoController@store', 'as' => 'producto.store']);
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

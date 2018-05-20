@@ -40,12 +40,12 @@ class ContratosController extends Controller
                     ->join('articulo', 'articulo_contrato.id_articulo', '=', 'articulo.id_articulo')
                     ->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
                     ->join('categoria_articulo', 'articulo.id_categoria', '=', 'categoria_articulo.id_categoria')
+                    ->join('estado_articulo', 'articulo.id_estado_articulo', '=', 'estado_articulo.id_estado_articulo')
                     ->where('articulo_contrato.id_contrato', '=', $contrato->id_contrato)
-                    ->select('clientes.*','articulo.*', 'categoria_articulo.nombre as nombre_categoria')
+                    ->select('clientes.*','articulo.*', 'categoria_articulo.nombre as nombre_categoria', 'estado_articulo.nombre as estadoarticulo')
                     ->get();
 
                     $j = 1;
-
 
                     if(count($cedula)>1){
 
@@ -56,11 +56,11 @@ class ContratosController extends Controller
                                 $datos[$i]["cedulaCliente"] = $c->num_cedula;
                                 $datos[$i]["nombres"] = $c->nombres;
                                 $datos[$i]["apellidos"] = $c->apellidos;
-                                $articulosAsociados = $articulosAsociados.$c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->marca."-".$c->referencia."-".$c->descripcion;
+                                $articulosAsociados = $articulosAsociados.$c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->estadoarticulo."-".$c->marca."-".$c->referencia."-".$c->descripcion;
                                 $j++;
                             }
                             else {
-                                $articulosAsociados = $articulosAsociados.",".$c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->marca."-".$c->referencia."-".$c->descripcion;
+                                $articulosAsociados = $articulosAsociados.",".$c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->estadoarticulo."-".$c->marca."-".$c->referencia."-".$c->descripcion;
                                 $datos[$i]["articulo"] = $articulosAsociados;
                                 $j++;
                             }
@@ -69,17 +69,14 @@ class ContratosController extends Controller
                         $j++;
                     }
                     else{
-                        error_log("Entre a solo 1 articulo");
                          foreach ($cedula as $c) {
+                            
                             $datos[$i]["cedulaCliente"] = $c->num_cedula;
                             $datos[$i]["nombres"] = $c->nombres;
                             $datos[$i]["apellidos"] = $c->apellidos;
-                            $datos[$i]["articulo"] = $c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->marca."-".$c->referencia."-".$c->descripcion;
+                            $datos[$i]["articulo"] = $c->num_cedula."-".$c->nombres."-".$c->apellidos."-".$c->telefono."-".$c->direccion_residencia."-".$c->id_articulo."-".$c->nombre_categoria."-".$c->estadoarticulo."-".$c->marca."-".$c->referencia."-".$c->descripcion;
                         }
                     }
-
-
-
             $estadoContrato = DB::select('call estadoContrato(?)',[$contrato->id_estado_contrato]);         
             $datos[$i]["idContrato"] = $contrato->id_contrato;
             $datos[$i]["estadoContrato"] = $estadoContrato[0]->nombre;
@@ -191,27 +188,76 @@ class ContratosController extends Controller
     public function edit(Request $request)
     {
         //
+      $value = $request->input('arrayDatos');
+        $cedulaAnterior = 0;
+        $estado = 0;
+        for($i = 0; $i < count($value); $i++ ){
 
-        $this->validate($request, [
-        'cliente' => 'required',
-        'estado' => 'required',
-        'valorPrestado' => 'required',
-        'fechaPrestamo' => 'required',
-        'valorIntereses' => 'required'
-        ]);
-            $cedula = explode("-", $request->get('cliente'));
-            $contrato = Contratos::find($request->get('idContrato'));
-            $contrato->id_estado_contrato = $request->get('idContrato');
-            $contrato->num_cedula_cliente = $cedula[0];
-            $contrato->id_estado_contrato = $request->get('estado');
-            $contrato->valor_prestado = $request->get('valorPrestado');
-            $contrato->fecha_prestamo = $request->get('fechaPrestamo');
-            $contrato->valor_intereses = $request->get('valorIntereses');
+             $cedulaCliente = $value[$i][2];
+             if($i == 0){
+                $cedulaAnterior =(int)$cedulaCliente;
+             }else if($cedulaAnterior != $cedulaCliente ){
+                 $estado = 2;
+             }
+        }
 
-            $contrato->save();
+        if($estado != 2){
 
-            session()->flash('success','Contrato Modificado Correctamente');
-            return redirect()->route('contratos.index');
+            for($i = 0; $i < count($value); $i++ ){
+                error_log("Cantidad de articulosssssssss:".count($value));
+                 $idContrato = $value[$i][0];
+                 $idArticulo = $value[$i][1];
+                 $cedula = $value[$i][2];
+                 $idEstadoContrato = $value[$i][3];
+                 $valorPrestado = $value[$i][4];
+                 $fechaPrestamo = $value[$i][5];
+                 $valorIntereses = $value[$i][6];
+  
+                 $idContratoCreado;
+
+                if($i==0){
+
+                    /*Se actualiza la tabla de contratos*/
+                    $updates = DB::table('contratos')
+                    ->where('id_contrato', '=', $idContrato)
+                    ->update([
+                        'id_estado_contrato' => $idEstadoContrato,
+                        'valor_prestado' => $valorPrestado,
+                        'fecha_prestamo' => $fechaPrestamo,
+                        'valor_intereses' => $valorIntereses
+                    ]);
+
+                    /*Se eleminian los articulos que tiene actualmente
+                    asociados el contrato*/
+
+                     DB::table('articulo_contrato')
+                    ->where('id_contrato', '=', $idContrato)
+                    ->delete();
+                }
+
+             
+                  /*Se inserta los nuevos articulos en la tabla articulo_contrato*/
+                   DB::table('articulo_contrato')
+                    ->insert([
+                        'id_articulo' => $idArticulo,
+                        'id_contrato' => $idContrato
+                 ]);
+
+               /* DB::update('update contratos set id_estado_contrato = ?, valor_prestado = ?,
+                fecha_prestamo = ?, valor_intereses = ? where id_contrato = ? ');
+
+                 DB::update('update articulo_contrato set id_articulo = ? where id_contrato = ?');
+                $articuloContrato->save();*/
+            }
+             
+        }else{
+            return $estado;
+        }
+
+        $request->session()->flash('message', 'New customer added successfully.');
+        $request->session()->flash('message-type', 'success');
+
+        return response()->json(['status'=>'200']);
     }
 
     /**
