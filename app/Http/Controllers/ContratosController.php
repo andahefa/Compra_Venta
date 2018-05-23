@@ -31,6 +31,7 @@ class ContratosController extends Controller
                     ->where('estado_articulo.nombre', '=', 'Sin Contrato')
                     ->select('clientes.*','articulo.id_articulo','categoria_articulo.nombre as categoria', 'estado_articulo.nombre as estado', 'articulo.marca', 'articulo.referencia', 'articulo.descripcion' )
                     ->get();
+
         $datos = [];
         $i = 0;
 
@@ -82,7 +83,20 @@ class ContratosController extends Controller
             $datos[$i]["estadoContrato"] = $estadoContrato[0]->nombre;
             $datos[$i]["valorPrestado"] = $contrato->valor_prestado;
             $datos[$i]["fechaPrestamo"] = $contrato->fecha_prestamo;
+            error_log("fechaaa prestamooooo:".$contrato->fecha_prestamo);
+
+            /*Se realiza consulta para obtener la fecha actual*/
+            $arrayFechaActual = DB::select('SELECT SYSDATE() as fechaActual');
+            $arrayFechaActual = explode(" ", $arrayFechaActual[0]->fechaActual);
+            $dateFechaActual=date_create($arrayFechaActual[0]);
+            $dateFechaContrato=date_create($contrato->fecha_prestamo);
+
+
+            $intervalo = date_diff($dateFechaActual,$dateFechaContrato);
+            /*Se obtiene la cantidad de meses sin pagar los intereses*/
+            $datos[$i]["cuotasAtrasadas"] = $intervalo->format('%m');
             $datos[$i]["intereses"] = $contrato->valor_intereses;
+            $datos[$i]["fechaVencimiento"] = $contrato->fecha_vencimiento_contrato;
 
             $i++;
         }

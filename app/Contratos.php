@@ -12,5 +12,5 @@ class Contratos extends Model
     protected $table = 'contratos';
     protected $primaryKey = 'id_contrato';
     protected $fillable = ['id_contrato', 'id_estado_contrato', 'valor_prestado', 
-						  'fecha_prestamo', 'valor_intereses'];
+						  'fecha_prestamo', 'valor_intereses', 'fecha_vencimiento_contrato'];
 }

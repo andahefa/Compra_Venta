@@ -1,7 +1,13 @@
   @extends('layout')
   @section('content')
             
-         
+         <script type="text/javascript">
+               $( "#opcionInventarioArticulos" ).removeClass( "active" );
+                $( "#opcionCategorias" ).removeClass( "active" );
+                $( "#opcionClientes" ).addClass( "active" );
+                $( "#opcionPagoIntereses" ).removeClass( "active" );
+                $( "#opcionContratos" ).removeClass( "active" );
+         </script>
                   <h2><center><b>Clientes</b></center></h2>
                    <button id="nuevoCliente" class="btn btn-success add-more" onclick="crearCliente()"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
                     <table id="articulos" class="table table-condensed table-bordered">

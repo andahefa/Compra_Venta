@@ -28,6 +28,9 @@ Route::resource('contratos', 'ContratosController');
 Route::resource('clientes', 'ClientesController');
 Route::post('clientes/crear', 'ClientesController@store');
 Route::post('clientes/actualizar', 'ClientesController@edit');
+Route::resource('pagos', 'PagosController');
+Route::post('pagos/crear', 'PagosController@store');
+Route::post('pagos/actualizar', 'PagosController@edit');
 
 
 //Route::post('/producto/store', ['uses' => 'ProductoController@store', 'as' => 'producto.store']);

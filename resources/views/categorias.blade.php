@@ -1,6 +1,12 @@
   @extends('layout')
   @section('content')
-
+  <script type="text/javascript">
+                $( "#opcionInventarioArticulos" ).removeClass( "active" );
+                $( "#opcionCategorias" ).addClass( "active" );
+                $( "#opcionClientes" ).removeClass( "active" );
+                $( "#opcionPagoIntereses" ).removeClass( "active" );
+                $( "#opcionContratos" ).removeClass( "active" );
+  </script>
         <div class="container">
                         <h2><center><b>Categorias</b></center></h2>
                        <div>

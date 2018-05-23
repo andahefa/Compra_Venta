@@ -47,6 +47,7 @@
       }
 
 
+
     </style>        
         <!-- META SECTION -->
         <title>Control Inventario</title>            
@@ -105,18 +106,21 @@
                         </div>                                                                        
                     </li>
                     <li class="xn-title">Navigation</li>
-                    <li class="active">
+                    <li class="active" id="opcionInventarioArticulos">
                         <a href="/index"><span class="glyphicon glyphicon-list"></span> <span class="xn-text">Inventario Articulos</span></a>                        
                     </li>
-                     <li >
-                        <a href="/categorias"><span class="glyphicon glyphicon-tags"></span> <span class="xn-text">Categoria</span></a>                        
+                     <li id="opcionCategorias">
+                        <a href="/categorias"><span class="glyphicon glyphicon-tags"></span> <span class="xn-text">Categoria Articulo</span></a>                        
                     </li>
-                      <li>
+                      <li id="opcionContratos">
                         <a href="/contratos"><span class="glyphicon glyphicon-list-alt"></span> <span class="xn-text">Contratos</span></a>                        
                     </li>
                     <li id="opcionClientes">
                         <a href="/clientes"><span class="glyphicon glyphicon-user"></span> <span class="xn-text">Clientes</span></a>                        
-                    </li>  
+                    </li> 
+                    <li id="opcionPagoIntereses">
+                        <a href="/pagos"><span class="glyphicon glyphicon-usd"></span> <span class="xn-text">Pago Intereses</span></a>                        
+                    </li>   
                                        
 
                     <li class="xn-openable">

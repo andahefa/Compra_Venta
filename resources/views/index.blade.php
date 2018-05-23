@@ -25,10 +25,12 @@
                                     <td>{{$articulo['categoria']}}</td>
                                     @if($articulo['estado'] == 'Sin Contrato')
                                      <td><p style="background: #F90000;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$articulo['estado']}}</p></td>
-                                    @else
+                                    @elseif($articulo['estado'] == 'En Bodega')
                                     <td><p style="background: #4A96D2;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$articulo['estado']}}</p></td>
+                                    @else
+                                    <td><p style="background: #A4A4A4;padding: 1px; color: #FFFFFF; border-radius: 7px 7px 7px 7px; text-align: center;">{{$articulo['estado']}}</p></td>
                                     @endif
-                                                                                                        
+                                                                         
                                     <td>{{$articulo['marca']}}</td>
                                     <td>{{$articulo['referencia']}}</td>
                                     <td>{{$articulo['descripcion']}}</td>
