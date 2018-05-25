@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version 5.5.5-10.1.30-MariaDB)
-# Date: 2018-05-25 11:53:06
+# Date: 2018-05-25 16:25:49
 # Generator: MySQL-Front 6.0  (Build 2.20)
 
 
@@ -134,15 +134,17 @@ CREATE TABLE `cuotas_vencidas` (
   `id_cuota_vencida` int(25) NOT NULL AUTO_INCREMENT,
   `id_contrato` int(25) NOT NULL,
   `fecha_vencimiento` date NOT NULL,
+  `cuota_vencida` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id_cuota_vencida`),
   KEY `id_contrato` (`id_contrato`),
   CONSTRAINT `cuotas_vencidas_ibfk_1` FOREIGN KEY (`id_contrato`) REFERENCES `contratos` (`id_contrato`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 #
 # Data for table "cuotas_vencidas"
 #
 
+INSERT INTO `cuotas_vencidas` VALUES (1,9,'0000-00-00',NULL);
 
 #
 # Structure for table "abono_capital"
@@ -204,7 +206,7 @@ CREATE TABLE `pago_intereses` (
 # Data for table "pago_intereses"
 #
 
-INSERT INTO `pago_intereses` VALUES (1,9,'2018-06-06',25000,'0000-00-00'),(2,9,'2018-05-27',30000,'0000-00-00'),(3,9,'2018-05-18',100000,'0000-00-00');
+INSERT INTO `pago_intereses` VALUES (1,9,'2018-06-06',25000,'2018-02'),(2,9,'2018-05-27',30000,'2018-04'),(3,9,'2018-05-18',100000,'2018-06'),(4,9,'2018-05-25',24000,'2018-05');
 
 #
 # Procedure "estadoContrato"
