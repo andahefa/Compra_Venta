@@ -59,6 +59,9 @@
                         <input type="text" name="cliente" id="cliente" class="form-control">
                         <label class="form.control">Valor Pago</label>
                         <input type="number" name="valorPago" id="valorPago" class="form-control">
+                        <label class="form.control">Mes a Pagar</label>
+                        <input type="month" name="mesPago" id="mesPago" class="form-control">
+                        
                         <label class="form.control">Fecha Pago</label>
                         <input type="date" name="fechaPago" id="fechaPago" class="form-control">
                     
