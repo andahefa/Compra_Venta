@@ -57,6 +57,7 @@ class PagosController extends Controller
           'fecha_pago' => $request->get('fechaPago'),
           'valor_pago' => $request->get('valorPago'),
           'id_contrato' => $request->get('idContrato'),
+          'cuota_pagada' => $request->get('mesPago')
         ]);
 
         $pagos->save();

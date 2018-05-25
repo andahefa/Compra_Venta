@@ -17,9 +17,11 @@
                         <tr>
                           <th class="text-center">Id Pago</th>
                           <th class="text-center">Cliente</th>
+                          <th class="text-center">Contrato</th>
                           <th class="text-center">Valor Pago</th>
                           <th class="text-center">Fecha Pago</th>
-                          <th class="text-center">Contrato</th>
+                          <th class="text-center">Cuota Pagada</th>
+                          <th class="text-center">Editar</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -27,9 +29,16 @@
                           <tr align="center">
                           <td id="idPago">{{$pago->id_pago_interes}}</td>
                           <td id="cliente">{{$pago->nombres}} {{$pago->apellidos}}</td>
+                          <td id="idPago">{{$pago->id_contrato}}</td>
                           <td id="idPago">{{$pago->valor_pago}}</td>
                           <td id="idPago">{{$pago->fecha_pago}}</td>
-                          <td id="idPago">{{$pago->id_contrato}}</td>
+                          <td id="idPago">{{$pago->cuota_pagada}}</td>
+                          <td>     
+                            <button id="editar" class="btn btn-primary" onclick="cargarModal(2)">
+                              <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                          </td>
+                          
                           </tr>
                           @endforeach
                       </tbody>
@@ -61,9 +70,9 @@
                         <input type="number" name="valorPago" id="valorPago" class="form-control">
                         <label class="form.control">Mes a Pagar</label>
                         <input type="month" name="mesPago" id="mesPago" class="form-control">
-                        
                         <label class="form.control">Fecha Pago</label>
                         <input type="date" name="fechaPago" id="fechaPago" class="form-control">
+                   
                     
                     </div>
                       <div class="modal-footer">
@@ -80,8 +89,12 @@
                     switch(tipo) {
                       case 1:
                           $('#crearYEditarPago').modal('show');
-                          $('#tituloModalCrearYEditarPago').text('Nuevo Contrato');
+                          $('#tituloModalCrearYEditarPago').text('Nuevo Pago');
                           break;
+                      case 2:
+                          $('#crearYEditarPago').modal('show');
+                          $('#tituloModalCrearYEditarPago').text('Editar Pago');
+                      break;
                       default:
                        
                   }                  

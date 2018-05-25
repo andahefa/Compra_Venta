@@ -8,6 +8,8 @@ use App\Estado_Contrato;
 use App\Clientes;
 use App\Articulo;
 use App\Articulo_Contrato;
+use App\PagoIntereses;
+use App\CuotasVencidas;
 use Path\To\Your\Log;
 use DB;
 use Illuminate\Support\Facades\Validator;
@@ -95,6 +97,12 @@ class ContratosController extends Controller
             $intervalo = date_diff($dateFechaActual,$dateFechaContrato);
             /*Se obtiene la cantidad de meses sin pagar los intereses*/
             $datos[$i]["cuotasAtrasadas"] = $intervalo->format('%m');
+
+
+            $pagosIntereses = PagoIntereses::orderBy('id_pago_intereses')->get();
+            $cuotasVencidas = CuotasVencidas::orderBy('id_cuota_vencida')->get();
+
+
             $datos[$i]["intereses"] = $contrato->valor_intereses;
             $datos[$i]["fechaVencimiento"] = $contrato->fecha_vencimiento_contrato;
 
