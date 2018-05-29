@@ -85,24 +85,69 @@ class ContratosController extends Controller
             $datos[$i]["estadoContrato"] = $estadoContrato[0]->nombre;
             $datos[$i]["valorPrestado"] = $contrato->valor_prestado;
             $datos[$i]["fechaPrestamo"] = $contrato->fecha_prestamo;
-            error_log("fechaaa prestamooooo:".$contrato->fecha_prestamo);
 
             /*Se realiza consulta para obtener la fecha actual*/
+
             $arrayFechaActual = DB::select('SELECT SYSDATE() as fechaActual');
+                        error_log("fecha actual contrato ".$contrato->id_contrato." :". $arrayFechaActual[0]->fechaActual );
+            error_log("fecha prestamo contrato ".$contrato->id_contrato." :". $contrato->fecha_prestamo );
             $arrayFechaActual = explode(" ", $arrayFechaActual[0]->fechaActual);
-            $dateFechaActual=date_create($arrayFechaActual[0]);
-            $dateFechaContrato=date_create($contrato->fecha_prestamo);
+            $dateFechaActual = date_create($arrayFechaActual[0]);
+            $dateFechaContrato = date_create($contrato->fecha_prestamo);
 
-
-            $intervalo = date_diff($dateFechaActual,$dateFechaContrato);
             /*Se obtiene la cantidad de meses sin pagar los intereses*/
-            $datos[$i]["cuotasAtrasadas"] = $intervalo->format('%m');
+            //$datos[$i]["cuotasAtrasadas"] = $intervalo->format('%m');
+            $intervalo = date_diff($dateFechaActual,$dateFechaContrato);
+       
+            error_log("invertalooooo:".(int)$intervalo->format('%m'));
+            $cuotasAtrasadas = 0;
+            for($j=0; $j<(int)$intervalo->format('%m'); $j++){
+                error_log("idContratooo:".$contrato->id_contrato);
+
+                if($j != 0){
+                    $time = strtotime($contrato->fecha_prestamo);
+                    $final = date("Y-m", strtotime("+".($j+1)." month", $time));
+                    $pagosIntereses = DB::select('select * from pago_intereses where id_contrato = ? 
+                                        and cuota_pagada = ?',[$contrato->id_contrato, $final ]);
+
+                    if(empty($pagosIntereses)){
+                        $cuotasAtrasadas = $cuotasAtrasadas+1;
 
 
-            $pagosIntereses = PagoIntereses::orderBy('id_pago_intereses')->get();
-            $cuotasVencidas = CuotasVencidas::orderBy('id_cuota_vencida')->get();
+                        /*Se inserta la cuota vencida en la tabla cuotas_vencidas*/
+                        $cuotasVencidas = CuotasVencidas::orderBy('id_cuota_vencida')->get();
+                        $fechaVencimientoCuota = date("Y-m-d", strtotime("+".($j+1)." month", $time));
+                        $cuotaVencida = date("Y-m", strtotime("+".($j+1)." month", $time));
 
+                        $existe = false;
+                        foreach ($cuotasVencidas as $cuota) {
+                           if ($cuotaVencida == $cuota->cuota_vencida) {
+                                $existe = true;
+                            }
+                        }
 
+                        if($existe == false){
+                             DB::table('cuotas_vencidas')->insert(
+                            ['id_cuota_vencida' => null, 'id_contrato' => $contrato->id_contrato, 'fecha_vencimiento' => $fechaVencimientoCuota, 'cuota_vencida' => $cuotaVencida]
+                            );
+                        }
+                           
+                    }
+            
+                }else{
+                    $final = date_format($dateFechaContrato, "Y-m" );
+                    $pagosIntereses = DB::select('select * from pago_intereses where id_contrato = ? 
+                                        and cuota_pagada = ?',[$contrato->id_contrato, $final ]);
+                    if(empty($pagosIntereses)){
+                        $cuotasAtrasadas = $cuotasAtrasadas+1;
+                    }
+            
+                }
+
+            
+            }
+
+            $datos[$i]["cuotasAtrasadas"] = $cuotasAtrasadas;
             $datos[$i]["intereses"] = $contrato->valor_intereses;
             $datos[$i]["fechaVencimiento"] = $contrato->fecha_vencimiento_contrato;
 

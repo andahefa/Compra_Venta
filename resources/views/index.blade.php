@@ -2,7 +2,28 @@
             @section('content')
                <div class="container">
                             <h2><center><b>Inventario de Articulos</b></center></h2>
-                             <button id="nuevoArticulo" class="btn btn-success add-more" onclick="crearArticulo()"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
+                          
+                            <div style="margin: 30px 0px -20px 0px;"> 
+                              <button id="nuevoArticulo" class="btn btn-success add-more" onclick="crearArticulo()"><span class="glyphicon glyphicon-plus"> Nuevo</span>
+                              </button>
+                              <!--BUSCADOR DE TAGS-->
+                              {!! Form::open(['route' => 'consultarEstado', 'method' => 'GET', 'class' => 'navbar-form pill-right']) !!}
+                                <div class="input-group" style="margin: -71px 0px 0px 120px">
+                                  {!! Form::select('name', ['numero1', 'numero2'], ['class' => 'form-control', 'placheholder' => 'Buscar Estado Articulo', 'aria-describedby' => 'search']) !!}
+                                  <span id="search" class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                </div>
+                              {!! Form::close() !!}
+                              <!--FIN DE TAGS-->
+                              <!--
+                              <div >
+                                <form id="searchForm" method="POST" action="{{ URL::route('consultarEstado') }}" style="margin: -30px 0px 0px 140px">
+                                  <input type="text" id="estado" name="estado" class="form-control" placeholder="Buscar Por Estado" style="width: 30%;margin: -34px 0px 0px 0px">
+                                  <button type="submit" name="Search!" class="btn" style="width: 5%;margin: -57px 0px 0px 280px"><i class="fa fa-search"></i></button>
+                                </form>
+                            </div>
+                            -->
+                          </div>
+
                               <table id="articulos" class="table table-condensed table-bordered">
                                 <thead>
                                   <tr>

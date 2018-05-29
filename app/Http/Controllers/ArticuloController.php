@@ -16,9 +16,11 @@ class ArticuloController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {   
-        $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
+    public function index(Request $request)
+    {  
+
+        /*
+        $estados = Estado_Articulo::oderBy('id_estado_articulo')->get();
         $categorias = Categoria_Articulo::orderBy('id_categoria')->get();
         $cateArtic = Categoria_Articulo::orderBy('id_categoria')->get();
         $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
@@ -56,6 +58,47 @@ class ArticuloController extends Controller
        
         return view('index')
             ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias, 'tipos' =>$cateArtic, 'estados' => $estados, 'clientes' => $clientes] );
+        */
+
+
+        $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
+        $categorias = Categoria_Articulo::orderBy('id_categoria')->get();
+        $cateArtic = Categoria_Articulo::orderBy('id_categoria')->get();
+        $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
+
+
+        $articulos = Articulo::estadoContrato($request->name)->orderBy('id_articulo')->get();
+        $clientes = Clientes::orderBy('num_cedula')->get();
+
+
+        $datos = [];
+        $i = 0;
+        foreach ($articulos as $articulo) {
+
+           $categoriaArticulo = DB::select('call idCategoria(?)',[$articulo->id_categoria]);
+           $estado = DB::select('call nombreEstado(?)',[$articulo->id_estado_articulo]);
+
+            $datos[$i]["id"] = $articulo->id_articulo;
+            $datos[$i]["idCategoria"] = $categoriaArticulo[0]->id_categoria;
+            $datos[$i]["categoria"] = $categoriaArticulo[0]->nombre;
+            $datos[$i]["idEstado"] = $estado[0]->id_estado_articulo;
+            $datos[$i]["estado"] = $estado[0]->nombre;
+            $datos[$i]["marca"] = $articulo->marca;
+            $datos[$i]["referencia"] = $articulo->referencia;
+            $datos[$i]["descripcion"] = $articulo->descripcion;
+            $datos[$i]["id_cliente"] = "";
+            $datos[$i]["nombres_cliente"] = "";
+            $datos[$i]["apellidos_cliente"] = "";
+
+          
+           $i= $i+1; 
+        }
+
+       
+        return view('index')
+            ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias, 'tipos' =>$cateArtic, 'estados' => $estados, 'clientes' => $clientes] );
+
+      
     }
 
     /**
@@ -172,5 +215,45 @@ class ArticuloController extends Controller
 
     public function consultar($dato){
 
+    }
+
+      public function consultarEstado(Request $request)
+      {   
+        $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
+        $estados = DB::select();
+        $categorias = Categoria_Articulo::orderBy('id_categoria')->get();
+        $cateArtic = Categoria_Articulo::orderBy('id_categoria')->get();
+        $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
+
+        $articulos = DB::select('select * from estado_articulo where estado = ?',[$request->estado]);
+        $clientes = Clientes::orderBy('num_cedula')->get();
+        error_log("Clientessss:".$clientes);
+
+        $datos = [];
+        $i = 0;
+        foreach ($articulos as $articulo) {
+
+           $categoriaArticulo = DB::select('call idCategoria(?)',[$articulo->id_categoria]);
+           $estado = DB::select('call nombreEstado(?)',[$articulo->id_estado_articulo]);
+
+            $datos[$i]["id"] = $articulo->id_articulo;
+            $datos[$i]["idCategoria"] = $categoriaArticulo[0]->id_categoria;
+            $datos[$i]["categoria"] = $categoriaArticulo[0]->nombre;
+            $datos[$i]["idEstado"] = $estado[0]->id_estado_articulo;
+            $datos[$i]["estado"] = $estado[0]->nombre;
+            $datos[$i]["marca"] = $articulo->marca;
+            $datos[$i]["referencia"] = $articulo->referencia;
+            $datos[$i]["descripcion"] = $articulo->descripcion;
+            $datos[$i]["id_cliente"] = $articulo->id_cliente;
+            $datos[$i]["nombres_cliente"] = $articulo->nombres;
+            $datos[$i]["apellidos_cliente"] = $articulo->apellidos;
+
+          
+           $i= $i+1; 
+        }
+
+       
+        return view('index')
+            ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias, 'tipos' =>$cateArtic, 'estados' => $estados, 'clientes' => $clientes] );
     }
 }

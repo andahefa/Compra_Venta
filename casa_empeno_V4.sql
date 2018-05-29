@@ -2,6 +2,62 @@
 # Date: 2018-05-25 16:25:49
 # Generator: MySQL-Front 6.0  (Build 2.20)
 
+#
+# Structure for table "clientes"
+#
+
+DROP TABLE IF EXISTS `clientes`;
+CREATE TABLE `clientes` (
+  `num_cedula` int(15) NOT NULL,
+  `nombres` varchar(50) NOT NULL,
+  `apellidos` varchar(50) NOT NULL,
+  `telefono` decimal(10,0) NOT NULL,
+  `direccion_residencia` varchar(50) NOT NULL,
+  PRIMARY KEY (`num_cedula`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# Data for table "clientes"
+#
+
+INSERT INTO `clientes` VALUES (79205593,'Manuel','Hernandez',3207850643,'prueba'),(123456789,'Jhon','Muñozjjj',3214567654,'direccion de prueba'),(1020808853,'Anderson David','hernan',3125968644,'direccion prueba');
+
+
+#
+# Structure for table "categoria_articulo"
+#
+
+DROP TABLE IF EXISTS `categoria_articulo`;
+CREATE TABLE `categoria_articulo` (
+  `id_categoria` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`id_categoria`)
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
+
+#
+# Data for table "categoria_articulo"
+#
+
+INSERT INTO `categoria_articulo` VALUES (1,'Telefonia Celular'),(4,'Television'),(69,'prueba5'),(80,'prueba3');
+
+
+#
+# Structure for table "estado_articulo"
+#
+
+DROP TABLE IF EXISTS `estado_articulo`;
+CREATE TABLE `estado_articulo` (
+  `id_estado_articulo` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`id_estado_articulo`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+#
+# Data for table "estado_articulo"
+#
+
+INSERT INTO `estado_articulo` VALUES (1,'En Bodega'),(2,'Sin Contrato'),(3,'En Venta'),(4,'Entregado'),(5,'Vendido');
+
 
 #
 # Structure for table "articulo"
@@ -31,59 +87,6 @@ CREATE TABLE `articulo` (
 
 INSERT INTO `articulo` VALUES (1,1,4,'huawei','p8 lite','Articulo en buen estado.aaa',123456789),(2,1,1,'samsung','s3 mini','descripcion de prueba 2',1020808853),(16,4,1,'Samsung','aaa','prueba',1020808853),(17,1,1,'sdsdaaaa','sdsd','asasa',1020808853),(18,4,1,'LG1','I-776GH','Televisor con golpe en la pantalla actualizado',1020808853),(19,1,1,'samsung','s8 mini','celular en buen estado',1020808853),(20,1,1,'pajarito','pajarito2','de prueba',123456789),(21,4,3,'samsung','s-3456','televisor en buen estado',79205593),(22,1,1,'iphone x','de mentiras','robadosss',123456789),(23,4,2,'LG','lg-11111','deeded',79205593),(24,4,2,'9999999999999999','sfsfsf','sfsfsffs',79205593);
 
-#
-# Structure for table "categoria_articulo"
-#
-
-DROP TABLE IF EXISTS `categoria_articulo`;
-CREATE TABLE `categoria_articulo` (
-  `id_categoria` int(10) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) NOT NULL,
-  PRIMARY KEY (`id_categoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
-
-#
-# Data for table "categoria_articulo"
-#
-
-INSERT INTO `categoria_articulo` VALUES (1,'Telefonia Celular'),(4,'Television'),(69,'prueba5'),(80,'prueba3');
-
-#
-# Structure for table "clientes"
-#
-
-DROP TABLE IF EXISTS `clientes`;
-CREATE TABLE `clientes` (
-  `num_cedula` int(15) NOT NULL,
-  `nombres` varchar(50) NOT NULL,
-  `apellidos` varchar(50) NOT NULL,
-  `telefono` decimal(10,0) NOT NULL,
-  `direccion_residencia` varchar(50) NOT NULL,
-  PRIMARY KEY (`num_cedula`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-#
-# Data for table "clientes"
-#
-
-INSERT INTO `clientes` VALUES (79205593,'Manuel','Hernandez',3207850643,'prueba'),(123456789,'Jhon','Muñozjjj',3214567654,'direccion de prueba'),(1020808853,'Anderson David','hernan',3125968644,'direccion prueba');
-
-#
-# Structure for table "estado_articulo"
-#
-
-DROP TABLE IF EXISTS `estado_articulo`;
-CREATE TABLE `estado_articulo` (
-  `id_estado_articulo` int(10) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) NOT NULL,
-  PRIMARY KEY (`id_estado_articulo`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
-#
-# Data for table "estado_articulo"
-#
-
-INSERT INTO `estado_articulo` VALUES (1,'En Bodega'),(2,'Sin Contrato'),(3,'En Venta'),(4,'Entregado'),(5,'Vendido');
 
 #
 # Structure for table "estado_contrato"
