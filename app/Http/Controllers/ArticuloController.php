@@ -67,7 +67,14 @@ class ArticuloController extends Controller
         $estados = Estado_Articulo::orderBy('id_estado_articulo')->get();
 
 
-        $articulos = Articulo::estadoContrato($request->name)->orderBy('id_articulo')->get();
+        //$articulos = Articulo::estadoContrato($request->name)->orderBy('id_articulo')->get();
+        $articulos = Articulo::estadoContrato($request->name)->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
+                    ->select('articulo.*', 'clientes.*')
+                    ->get();
+        /*$articulos = DB::table('articulo')
+                    ->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
+                    ->select('articulo.*', 'clientes.*')
+                    ->get();*/ 
         $clientes = Clientes::orderBy('num_cedula')->get();
 
 
@@ -86,9 +93,9 @@ class ArticuloController extends Controller
             $datos[$i]["marca"] = $articulo->marca;
             $datos[$i]["referencia"] = $articulo->referencia;
             $datos[$i]["descripcion"] = $articulo->descripcion;
-            $datos[$i]["id_cliente"] = "";
-            $datos[$i]["nombres_cliente"] = "";
-            $datos[$i]["apellidos_cliente"] = "";
+            $datos[$i]["id_cliente"] = $articulo->id_cliente;
+            $datos[$i]["nombres_cliente"] = $articulo->nombres;
+            $datos[$i]["apellidos_cliente"] =$articulo->apellidos;
 
           
            $i= $i+1; 
@@ -255,5 +262,10 @@ class ArticuloController extends Controller
        
         return view('index')
             ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias, 'tipos' =>$cateArtic, 'estados' => $estados, 'clientes' => $clientes] );
+    }
+
+    function applyScope($query){
+        $articulo = new Articulo();
+    return $articulo->estadoContrato($query,2);
     }
 }
