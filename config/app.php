@@ -179,6 +179,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Brian2694\Toastr\ToastrServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -231,6 +232,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

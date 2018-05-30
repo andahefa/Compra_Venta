@@ -20,11 +20,21 @@ class ContratosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
 
-        $contratos = Contratos::orderBy('id_contrato')->get();
+        //$contratos = Contratos::orderBy('id_contrato')->get();
+         //$contratos = Contratos::filtro($request->name)->orderBy('id_contrato')->get();
+
+           $contratos = Contratos::filtro($request->name)
+            ->join('articulo_contrato', 'contratos.id_contrato', '=', 'articulo_contrato.id_contrato')
+            ->join('articulo', 'articulo.id_articulo', '=', 'articulo_contrato.id_articulo')
+            ->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
+            ->join('estado_contrato', 'contratos.id_estado_contrato', '=', 'estado_contrato.id_estado')
+            ->select('contratos.*', 'clientes.nombres', 'clientes.apellidos', 'estado_contrato.nombre')
+            ->get();
+
         $estados = Estado_Contrato::orderBy('id_estado')->get();
         $articulos = DB::table('articulo')
                     ->join('categoria_articulo', 'articulo.id_categoria', '=', 'categoria_articulo.id_categoria')

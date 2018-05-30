@@ -9,11 +9,14 @@
                               <!--BUSCADOR DE TAGS-->
                               {!! Form::open(['route' => 'consultarEstado', 'method' => 'GET', 'class' => 'navbar-form pill-right']) !!}
                                 <div class="input-group" style="margin: -71px 0px 0px 120px">
-                                  {!! Form::text('name',null, ['class' => 'form-control', 'placheholder' => 'Buscar Estado Articulo', 'aria-describedby' => 'search']) !!}
+                                  {!! Form::text('name',null, ['class' => 'form-control', 'placeholder' => 'Search...', 'aria-describedby' => 'search']) !!}
 
                                   <span id="search" class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
                                 </div>
                               {!! Form::close() !!}
+                              
+                              <a href="{{ route('pdf_articulos',['descargar'=>'pdf']) }} "><button id="pdf" class="btn " onclick="" style="margin: -125px 0px 0px 390px"><span class="glyphicon glyphicon-file"> Generar PDF</span></a>
+                              
                               <!--FIN DE TAGS-->
                               <!--
                               <div >
@@ -28,19 +31,19 @@
                               <table id="articulos" class="table table-condensed table-bordered">
                                 <thead>
                                   <tr>
-                                    <th>Nombre Cliente</th>
-                                    <th>Cedula Cliente</th>
-                                    <th>Categoria</th>
-                                    <th>Estado</th>
-                                    <th>Marca</th>
-                                    <th>Referencia</th>
-                                    <th>Descripción</th>
-                                    <th>Editar</th>
+                                    <th class="text-center">Nombre Cliente</th>
+                                    <th class="text-center">Cedula Cliente</th>
+                                    <th class="text-center">Categoria</th>
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center">Marca</th>
+                                    <th class="text-center">Referencia</th>
+                                    <th class="text-center">Descripción</th>
+                                    <th class="text-center">Editar</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($articulos as $articulo)
-                                    <tr>
+                                    <tr align="center">
                                     <td style="display:none">{{$articulo['id']}}</td>
                                     <td>{{$articulo['nombres_cliente']}} {{$articulo['apellidos_cliente']}}</td>
                                     <td>{{$articulo['id_cliente']}}</td>

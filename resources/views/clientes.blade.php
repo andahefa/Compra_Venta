@@ -9,22 +9,31 @@
                 $( "#opcionContratos" ).removeClass( "active" );
          </script>
                   <h2><center><b>Clientes</b></center></h2>
+                  <div style="margin: 30px 0px -20px 0px;">
                    <button id="nuevoCliente" class="btn btn-success add-more" onclick="crearCliente()"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
+                    {!! Form::open(['route' => 'clientesfiltro', 'method' => 'GET', 'class' => 'navbar-form pill-right']) !!}
+                        <div class="input-group" style="margin: -71px 0px 0px 120px">
+                        {!! Form::text('name',null, ['class' => 'form-control', 'placeholder' => 'Search...', 'aria-describedby' => 'search']) !!}
+
+                          <span id="search" class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                        </div>
+                    {!! Form::close() !!}
+                    </div>
                     <table id="articulos" class="table table-condensed table-bordered">
                       <thead>
                         <tr>
-                          <th>Cedula</th>
-                          <th>Nombres</th>
-                          <th>Apellidos</th>
-                          <th>Telefono</th>
-                          <th>Dirección Residencia</th>
-                          <th>Editar</th>
-                          <th>Eliminar</th>
+                          <th class="text-center">Cedula</th>
+                          <th class="text-center">Nombres</th>
+                          <th class="text-center">Apellidos</th>
+                          <th class="text-center">Telefono</th>
+                          <th class="text-center">Dirección Residencia</th>
+                          <th class="text-center">Editar</th>
+                          <th class="text-center">Eliminar</th>
                         </tr>
                       </thead>
                       <tbody>
                           @foreach($clientes as $cliente)
-                          <tr>
+                          <tr align="center">
                           <td>{{$cliente->num_cedula}}</td>
                           <td>{{$cliente->nombres}}</td>
                           <td>{{$cliente->apellidos}}</td>

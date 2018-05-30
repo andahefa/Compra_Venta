@@ -6,47 +6,43 @@
     $( "#opcionInventarioArticulos" ).removeClass( "active" );
     $( "#opcionCategorias" ).removeClass( "active" );
     $( "#opcionClientes" ).removeClass( "active" );
-    $( "#opcionPagoIntereses" ).addClass( "active" );
+    $( "#opcionPagoIntereses" ).removeClass( "active" );
     $( "#opcionContratos" ).removeClass( "active" );
+    $('#opcionHistoricoPagoIntereses').addClass('active');
   </script>
 
-   <h2><center><b>Pago Intereses</b></center></h2>
-                  <div style="margin: 30px 0px -20px 0px;">
-                   <button id="nuevoArticulo" class="btn btn-success add-more" onclick="cargarModal(1)"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
-                    {!! Form::open(['route' => 'pagosfiltro', 'method' => 'GET', 'class' => 'navbar-form pill-right']) !!}
-                        <div class="input-group" style="margin: -71px 0px 0px 120px">
+   <h2><center><b>Histórico Pagos</b></center></h2>
+                    {!! Form::open(['route' => 'historicofiltro', 'method' => 'GET', 'class' => 'navbar-form pill-right']) !!}
+                        <div class="input-group" style="margin: 20px 0px 0px 4px">
                         {!! Form::text('name',null, ['class' => 'form-control', 'placeholder' => 'Search...', 'aria-describedby' => 'search']) !!}
+
                           <span id="search" class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
                         </div>
                     {!! Form::close() !!}
-                    </div>
                     <table id="articulos" class="table table-condensed table-bordered">
                       <thead>
                         <tr>
-                          <th class="text-center">Id Pago</th>
+                          <th class="text-center">Id Historico</th>
+                          <th class="text-center">Id Pago Interes</th>
                           <th class="text-center">Cliente</th>
                           <th class="text-center">Contrato</th>
                           <th class="text-center">Valor Pago</th>
                           <th class="text-center">Fecha Pago</th>
                           <th class="text-center">Cuota Pagada</th>
-                          <th class="text-center">Editar</th>
+                          <th class="text-center">Fecha Ultima Modificación</th>
                         </tr>
                       </thead>
                       <tbody>
-                         @foreach($pagos as $pago)
+                         @foreach($historicoPagos as $pago)
                           <tr align="center">
+                          <td id="idHistorico">{{$pago->id_historico}}</td>
                           <td id="idPago">{{$pago->id_pago_interes}}</td>
                           <td id="cliente">{{$pago->nombres}} {{$pago->apellidos}}</td>
                           <td id="idContrato">{{$pago->id_contrato}}</td>
                           <td id="valorPago">{{$pago->valor_pago}}</td>
                           <td id="fechaPago">{{$pago->fecha_pago}}</td>
                           <td id="cuotaPagada">{{$pago->cuota_pagada}}</td>
-                          <td>     
-                            <button id="editar" class="btn btn-primary" onclick="cargarModal(2)">
-                              <span class="glyphicon glyphicon-edit"></span>
-                            </button>
-                          </td>
-                          
+                          <td id="cuotaPagada">{{$pago->fecha_ultima_modificacion}}</td>
                           </tr>
                           @endforeach
                       </tbody>
@@ -97,36 +93,6 @@
                 <!-- end Modal crear-->
                 <script >
                   
-                  function cargarModal(tipo){
-                    switch(tipo) {
-                      case 1:
-                          $('#crearYEditarPago').modal('show');
-                          $('#tituloModalCrearYEditarPago').text('Nuevo Pago');
-                          $("#guardarYEditar").attr("onclick","crearPago()");
-                          break;
-                      case 2:
-                       var id_pago = $('#idPago').text();
-                       var id_contrato = $('#idContrato').text();
-                       var fecha_pago = $('#fechaPago').text();
-                       var valor_pago = $('#valorPago').text();
-                       var cuota_pagada = $('#cuotaPagada').text();
-
-                        $('#cIdPago').val(id_pago);
-                        $('#cIdContrato').val(id_contrato);
-                        $('#cFechaPago').val(fecha_pago);
-                        $('#cValorPago').val(valor_pago);
-                        $('#cMesPago').val(cuota_pagada);
-
-                          $('#crearYEditarPago').modal('show');
-                          $('#tituloModalCrearYEditarPago').text('Editar Pago');
-                          $("#guardarYEditar").attr("onclick","editarPago()");
-
-
-                      break;
-                      default:
-                       
-                  }                  
-                }
 
                 function clientes(){
 

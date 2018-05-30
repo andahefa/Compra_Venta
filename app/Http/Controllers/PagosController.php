@@ -14,16 +14,23 @@ class PagosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
 
-        $pagos = DB::table('pago_intereses as pi')
+
+        /*$pagos = DB::table('pago_intereses as pi')
                     ->join('articulo_contrato as ac', 'pi.id_contrato', '=', 'ac.id_contrato')
                     ->join('articulo as ar', 'ac.id_articulo', '=', 'ar.id_articulo')
                     ->join('clientes as cli', 'cli.num_cedula', '=', 'ar.id_cliente')
                     ->select('pi.id_pago_interes','pi.*', 'cli.*')
-                    ->distinct()->get('pi.id_pago_interes');
+                    ->distinct()->get('pi.id_pago_interes');*/
+
+                     $pagos = PagoIntereses::filtro($request->name)->join('articulo_contrato as ac', 'pago_intereses.id_contrato', '=', 'ac.id_contrato')
+                    ->join('articulo as ar', 'ac.id_articulo', '=', 'ar.id_articulo')
+                    ->join('clientes as cli', 'cli.num_cedula', '=', 'ar.id_cliente')
+                    ->select('pago_intereses.id_pago_interes','pago_intereses.*', 'cli.*')
+                    ->distinct()->get('pago_intereses.id_pago_interes');
 
         $contratos = DB::table('contratos  as c')
                     ->join('articulo_contrato as ar', 'c.id_contrato', '=', 'ar.id_contrato')

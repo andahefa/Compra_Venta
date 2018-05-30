@@ -9,7 +9,15 @@
     $( "#opcionContratos" ).addClass( "active" );
   </script>
    <h2><center><b>Contratos</b></center></h2>
+                  <div style="margin: 30px 0px -20px 0px;"> 
                    <button id="nuevoArticulo" class="btn btn-success add-more" onclick="cargarModal(1, null)"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
+                   {!! Form::open(['route' => 'contratosfiltro', 'method' => 'GET', 'class' => 'navbar-form pill-right']) !!}
+                        <div class="input-group" style="margin: -71px 0px 0px 120px">
+                        {!! Form::text('name',null, ['class' => 'form-control', 'placeholder' => 'Search...', 'aria-describedby' => 'search']) !!}
+                          <span id="search" class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                        </div>
+                    {!! Form::close() !!}
+                  </div>
                     <table id="articulos" class="table table-condensed table-bordered">
                       <thead>
                         <tr>

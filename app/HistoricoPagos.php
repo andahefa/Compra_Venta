@@ -4,17 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Contratos extends Model
+class HistoricoPagos extends Model
 {
     //
 
-    public $timestamps = false;
-    protected $table = 'contratos';
-    protected $primaryKey = 'id_contrato';
-    protected $fillable = ['id_contrato', 'id_estado_contrato', 'valor_prestado', 
-						  'fecha_prestamo', 'valor_intereses', 'fecha_vencimiento_contrato'];
 
-	public function scopeFiltro($query, $valor){
+    public $timestamps = false;
+    protected $table = 'historico_pagos';
+    protected $primaryKey = 'id_historico';
+    protected $fillable = ['id_historico','id_pago_interes', 'id_contrato','fecha_pago', 'valor_pago', 'cuota_pagada', 'fecha_ultima_modificacion'];
+
+     public function scopeFiltro($query, $valor){
 
     	if($valor != ""){
 
@@ -44,16 +44,16 @@ class Contratos extends Model
     				break;
     		}*/
     				return $query
-    		  		->where('contratos.id_contrato', 'like', "%" . $valor . "%")
-                    ->orWhere('contratos.id_estado_contrato', 'like', "%" . $valor . "%")
-                    ->orWhere('contratos.valor_prestado', 'like', "%" . $valor . "%")
-                    ->orWhere('contratos.fecha_prestamo', 'like', "%" . $valor . "%")
-                    ->orWhere('contratos.valor_intereses', 'like', "%" . $valor . "%")
-                    ->orWhere('contratos.fecha_vencimiento_contrato', 'like', "%" . $valor . "%")
+    		  		->where('historico_pagos.id_historico', 'like', "%" . $valor . "%")
+                    ->orWhere('historico_pagos.id_pago_interes', 'like', "%" . $valor . "%")
+                    ->orWhere('historico_pagos.id_contrato', 'like', "%" . $valor . "%")
+                    ->orWhere('historico_pagos.fecha_pago', 'like', "%" . $valor . "%")
+                    ->orWhere('historico_pagos.valor_pago', 'like', "%" . $valor . "%")
+                    ->orWhere('historico_pagos.cuota_pagada', 'like', "%" . $valor . "%")
+                    ->orWhere('historico_pagos.fecha_ultima_modificacion', 'like', "%" . $valor . "%")
                     ->orWhere('nombres', 'like', "%" . $valor . "%")
-                    ->orWhere('apellidos', 'like', "%" . $valor . "%")
-                    ->orWhere('nombre', 'like', "%" . $valor . "%");
-                    
+                    ->orWhere('apellidos', 'like', "%" . $valor . "%");
+    	 
     	}
     }
 }

@@ -39,7 +39,10 @@ class Articulo extends Model
                     ->where('marca', 'like', "%" . $valor . "%")
                     ->orWhere('referencia', 'like', "%" . $valor . "%")
                     ->orWhere('descripcion', 'like', "%" . $valor . "%")
-                    ->orWhere('id_cliente', 'like', "%" . $valor . "%");
+                    ->orWhere('id_cliente', 'like', "%" . $valor . "%")
+                    ->orWhere('nombres', 'like', "%" . $valor . "%")
+                    ->orWhere('apellidos', 'like', "%" . $valor . "%")
+                    ->orWhere('nombre', 'like', "%" . $valor . "%");
     				break;
     		}
     	 

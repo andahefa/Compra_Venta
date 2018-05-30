@@ -8,6 +8,8 @@ use App\Categoria_Articulo;
 use App\Estado_Articulo;
 use App\Clientes;
 use DB;
+use PDF;
+use View;
 
 class ArticuloController extends Controller
 {
@@ -69,8 +71,12 @@ class ArticuloController extends Controller
 
         //$articulos = Articulo::estadoContrato($request->name)->orderBy('id_articulo')->get();
         $articulos = Articulo::estadoContrato($request->name)->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
-                    ->select('articulo.*', 'clientes.*')
+            ->join('categoria_articulo', 'articulo.id_categoria', '=', 'categoria_articulo.id_categoria')
+                    ->select('articulo.*', 'clientes.*', 'categoria_articulo.*')
                     ->get();
+
+
+
         /*$articulos = DB::table('articulo')
                     ->join('clientes', 'articulo.id_cliente', '=', 'clientes.num_cedula')
                     ->select('articulo.*', 'clientes.*')
@@ -102,8 +108,9 @@ class ArticuloController extends Controller
         }
 
        
-        return view('index')
+       return view('index')
             ->with(['articulos' =>$datos, 'estados' => $estados, 'categorias' => $categorias, 'tipos' =>$cateArtic, 'estados' => $estados, 'clientes' => $clientes] );
+
 
       
     }
@@ -267,5 +274,18 @@ class ArticuloController extends Controller
     function applyScope($query){
         $articulo = new Articulo();
     return $articulo->estadoContrato($query,2);
+    }
+
+    public function generarReporte(Request $request){       
+
+      $productos = Articulo::all();//OBTENGO TODOS MIS PRODUCTO
+        view()->share('productos',$productos);//VARIABLE GLOBAL PRODUCTOS
+        if($request->has('descargar')){
+            $pdf = PDF::loadView('pdf_articulos');//CARGO LA VISTA
+            return $pdf->download('toda-la-lista-de-productos.pdf');//SUGERIR NOMBRE A DESCARGAR
+        }
+        return view('pdf_articulos');//RETORNO A MI VISTA
+        
+
     }
 }

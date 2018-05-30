@@ -19,10 +19,10 @@ class ClientesController extends Controller
         $this->result = $result;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         //
-        $clientes = Clientes::orderBy('num_cedula')->get();
+        $clientes = Clientes::filtro($request->name)->orderBy('num_cedula')->get();
            return view('clientes')
             ->with(['clientes' =>$clientes ]);
           

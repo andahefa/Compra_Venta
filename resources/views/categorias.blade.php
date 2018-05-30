@@ -9,7 +9,7 @@
   </script>
         <div class="container">
                         <h2><center><b>Categorias</b></center></h2>
-                       <div>
+                       <div style="margin: 20px 0px 0px 0px">
                           <button class="btn btn-success add-more" id="nuevaCategoria" onclick="crearCategoria()">
                               <span class="glyphicon glyphicon-plus"> Agregar</span>
                           </button>
@@ -26,7 +26,7 @@
                               </thead>
                               <tbody>
                               @foreach($categorias as $categoria)
-                              <tr>
+                              <tr align="center">
                                   <td>{{$categoria->nombre}}</td>
                                   <td align="center">
                                       <button id="editar" class="btn btn-primary" onclick="editarCategoria('{{$categoria->id_categoria}}', '{{$categoria->nombre}}')" >

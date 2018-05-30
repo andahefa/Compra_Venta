@@ -18,6 +18,7 @@ Route::get('/categorias','CategoriasController@index');
 Route::get('articulo/create','ArticuloController@create');
 Route::post('articulo/store', 'ArticuloController@store');
 Route::post('articulo/actualizar', 'ArticuloController@edit');
+Route::get('articulo/generarPDF', 'ArticuloController@pdf');
 Route::resource('articulos', 'ArticuloController');
 Route::resource('categorias', 'CategoriasController');
 Route::post('categorias/crear', 'CategoriasController@store');
@@ -31,11 +32,27 @@ Route::post('clientes/actualizar', 'ClientesController@edit');
 Route::resource('pagos', 'PagosController');
 Route::post('pagos/crear', 'PagosController@store');
 Route::post('pagos/actualizar', 'PagosController@edit');
-Route::resource('articulos', 'ArticulosController');
 Route::get('articulo/consultarEstado',[
   'as' => 'consultarEstado', 
   'uses' => 'ArticuloController@index'
 ]);
+Route::get('historicoPagos/filtro',[
+  'as' => 'historicofiltro', 
+  'uses' => 'HistoricoPagosController@index'
+]);
+Route::get('contratos',[
+  'as' => 'contratosfiltro', 
+  'uses' => 'ContratosController@index'
+]);
+Route::get('clientes',[
+  'as' => 'clientesfiltro', 
+  'uses' => 'ClientesController@index'
+]);
+Route::get('pagos',[
+  'as' => 'pagosfiltro', 
+  'uses' => 'PagosController@index'
+]);
+Route::resource('historicoIntereses','HistoricoPagosController');
 
 
 
@@ -45,3 +62,14 @@ Route::get('articulo/consultarEstado',[
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/logout', 'HomeController@logout');
+
+Route::get('pdf', function(){
+  $pdf = PDF::loadView('prueba');
+  return $pdf->download('archivo.pdf');
+});
+
+Route::get('pdf_articulos',array(
+    'as'=>'pdf_articulos',
+    'uses'=>'ArticuloController@generarReporte'
+));
