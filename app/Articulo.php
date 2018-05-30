@@ -13,10 +13,12 @@ class Articulo extends Model
     protected $fillable = ['id_articulo','id_categoria', 'id_estado_articulo','marca','referencia','descripcion', 'id_cliente'];
 
     /*Funcion que permite realizar un filtro por estao del contrato*/
-    public function scopeestadoContrato($query, $estadoArticulo){
+    public function scopeestadoContrato($query, $valor){
 
-    	if($estadoArticulo != ""){
-    		switch (strtolower($estadoArticulo)) {
+    	if($valor != ""){
+
+            
+    		switch (strtolower($valor)) {
     			case 'sin contrato':
     				return $query->where('id_estado_Articulo', 2);
     				break;
@@ -33,7 +35,11 @@ class Articulo extends Model
     				return $query->where('id_estado_Articulo', 5);
     				break;
     			default:
-    				# code...
+    				return $query
+                    ->where('marca', 'like', "%" . $valor . "%")
+                    ->orWhere('referencia', 'like', "%" . $valor . "%")
+                    ->orWhere('descripcion', 'like', "%" . $valor . "%")
+                    ->orWhere('id_cliente', 'like', "%" . $valor . "%");
     				break;
     		}
     	 

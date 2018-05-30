@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\PagoIntereses;
+use App\Contratos;
 use DB;
 
 class PagosController extends Controller
@@ -24,9 +25,20 @@ class PagosController extends Controller
                     ->select('pi.id_pago_interes','pi.*', 'cli.*')
                     ->distinct()->get('pi.id_pago_interes');
 
+        $contratos = DB::table('contratos  as c')
+                    ->join('articulo_contrato as ar', 'c.id_contrato', '=', 'ar.id_contrato')
+                    ->join('articulo as art', 'ar.id_articulo', '=', 'art.id_articulo')
+                    ->join('clientes as cl', 'cl.num_cedula', '=', 'art.id_cliente')
+                    ->distinct('c.id_contrato')
+                    ->select('c.*', 'cl.*')
+                    ->get('pi.id_pago_interes');
+
+
+
+
   
         return View('pagos')
-                ->with(['pagos'=>$pagos]);
+                ->with(['pagos'=>$pagos, 'contratos' =>$contratos]);
           
         
     }
@@ -53,11 +65,10 @@ class PagosController extends Controller
 
         $pagos = new PagoIntereses([
           'id_pago_interes' => 0,
-          'id_contrato' => $request->get('idContrato'),
-          'fecha_pago' => $request->get('fechaPago'),
-          'valor_pago' => $request->get('valorPago'),
-          'id_contrato' => $request->get('idContrato'),
-          'cuota_pagada' => $request->get('mesPago')
+          'id_contrato' => $request->id_contrato,
+          'fecha_pago' => $request->fecha_pago,
+          'valor_pago' => $request->valor_pago,
+          'cuota_pagada' => $request->cuota_pagada
         ]);
 
         $pagos->save();
@@ -82,9 +93,20 @@ class PagosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        //  
+
+            $pago = PagoIntereses::find($request->id_pago);
+            $pago->id_contrato = $request->id_contrato;
+            $pago->fecha_pago = $request->fecha_pago;
+            $pago->valor_pago = $request->valor_pago;
+            $pago->cuota_pagada = $request->cuota_pagada;
+
+            $pago->save();
+
+            session()->flash('success','Pago Modificado Correctamente');
+            return redirect()->route('pagos.index');
     }
 
     /**

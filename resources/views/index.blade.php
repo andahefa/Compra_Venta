@@ -10,6 +10,7 @@
                               {!! Form::open(['route' => 'consultarEstado', 'method' => 'GET', 'class' => 'navbar-form pill-right']) !!}
                                 <div class="input-group" style="margin: -71px 0px 0px 120px">
                                   {!! Form::text('name',null, ['class' => 'form-control', 'placheholder' => 'Buscar Estado Articulo', 'aria-describedby' => 'search']) !!}
+
                                   <span id="search" class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
                                 </div>
                               {!! Form::close() !!}
